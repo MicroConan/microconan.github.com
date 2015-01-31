@@ -1,0 +1,360 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="扩展了些什么？
+
+fis-plus也是调用fis模块
+fis-plus是添加了一些推荐的文件夹规范和fis配置（fis-conf.js）
+
+
+也就是fis-plus的一些规范，例如将页面tpl文件(page)发布(release)到template文件夹，将widget下面的js+css发布到sta">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/31/2014-03-28-基于fis扩展的fis-plus/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://js250.com" title="conan">conan</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+    Updated:<time datetime="2015-01-31T07:24:24.000Z" itemprop="dateModified">1月 31 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展了些什么？"><span class="toc-number">1.</span> <span class="toc-text">扩展了些什么？</span></a></li></ol>
+		</div>
+		
+		<h2 id="扩展了些什么？">扩展了些什么？</h2>
+<ul>
+<li>fis-plus也是调用fis模块</li>
+<li>fis-plus是添加了一些推荐的文件夹规范和fis配置（fis-conf.js）</li>
+</ul>
+<blockquote>
+<p>也就是<code>fis-plus</code>的一些规范，例如将页面tpl文件(page)发布(release)到<code>template</code>文件夹，将<code>widget</code>下面的<code>js+css</code>发布到<code>static/widget/页面名称/模块名称/</code>文件夹下，将<code>widget</code>的tpl文件夹发布到<code>/template/页面名称/widget/模块名称/</code>文件夹下,map.json<code>放到</code>config`目录。</p>
+</blockquote>
+<ul>
+<li>基于<code>smarty</code>做了一些便于模块化的插件(<code>plugin</code>)，扩展插件DEMO（<a href="http://zhangnan.baidu.com/dropbox/code/smarty/Smarty-3.1.18/demo/" target="_blank" rel="external">http://zhangnan.baidu.com/dropbox/code/smarty/Smarty-3.1.18/demo/</a> </li>
+</ul>
+<p>），这里的插件和<code>fis</code>没有任何牵扯，仅仅使用了<code>map.json</code>资源表.<br>通过自定义标签收集资源放到对应的位置，根据使用了那些资源。 知道页面中用了哪些资源，<br>通过<code>map.json</code>查看已经打包了哪些资源，直接使用打包的资源放在头部(css)或者底部(js)</p>
+<pre><code><span class="label">+ require:</span>直接加载一个静态资源
+
+    + 实际是收集一个资源到资源池，这里会第一次使用时，获取<span class="escape">`m</span>ap.json<span class="escape">`。</span>
+
+<span class="label">+ script:</span>是内嵌一个js代码
+
+    + 收集内嵌的js，方便之后进行<span class="escape">`r</span>enderScriptPool<span class="escape">`
+</span>
+<span class="label">+ widget:</span>是加载tpl+js+css
+
+    + 收集一个模块的三大资源(tpl+js+css)
+
++ html+head+body等标签主要是控制结构，全局控制页面（例如把script到body底部位置、css放到head位置）
+
+    + <span class="escape">`h</span>ead<span class="escape">`插</span>件负责放置一个<span class="escape">`c</span>ss hook<span class="escape">`（</span><span class="escape">`&lt;</span>!--[FIS_CSS_LINKS_HOOK]--&gt;<span class="escape">`）</span>
+
+    + <span class="escape">`b</span>ody<span class="escape">`1</span>、插件负责页面把所有内联的<span class="escape">`s</span>cript<span class="escape">`放</span>到这里执行（<span class="escape">`r</span>enderScriptPool<span class="escape">`）</span>。<span class="number">2</span>、<span class="escape">`m</span>od.js(小型js模块加载工具)<span class="escape">`和</span>将异步js的map资源变为<span class="escape">`r</span>esorce map<span class="escape">`内</span>联到页面中还有所有需要的同步的js资源放进页面中。这里已经获取过map资源表，查看如果已经打包的就仅仅记载打包的文件。
+</code></pre><ul>
+<li><p>分当前页（home）模块和基础模块(common)</p>
+<ul>
+<li>这是前端所难以完成的</li>
+</ul>
+</li>
+<li><p>测试数据</p>
+<ul>
+<li>test</li>
+</ul>
+</li>
+<li>数据资源重定向（rewrite）<ul>
+<li>为这个DEMO写了一下详细的注释(<code>fisp server open</code>)</li>
+<li>思路是写了一个路由(router)，获取url，再获取<code>server-confi/下面的文件.conf</code>来一行行读取，逐个匹配，成功就去获取数据然后赋值显示。</li>
+</ul>
+</li>
+<li>特别注意：只有模块化才可以用<code>require</code></li>
+</ul>
+<p>前端文件完整生命：</p>
+<blockquote>
+<p>模块化（一个个模块文件）—-&gt;编译完（模板缓存php文件）——-&gt;php解析（用户访问php解析成字符串<br>）——&gt;html+css+js（浏览器请求过来）——&gt;浏览器视图（UI）</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://js250.com/2015/01/31/2014-03-28-基于fis扩展的fis-plus/" data-title="microConan" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/31/ipad+phone版本webapp响应时加载/" title="ipad+phone">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  ipad+phone</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/31/2015-01-31-exprees_note/"  title="express记录">
+ <strong>NEXT:</strong><br/> 
+ <span>express记录
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展了些什么？"><span class="toc-number">1.</span> <span class="toc-text">扩展了些什么？</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"microsoft"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

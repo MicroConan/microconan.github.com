@@ -1,0 +1,399 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>养成使用控制台打印加载时间的习惯 | microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="前言
+最近在做webapp速度优化,思考各种提高加载速度的办法.包括不限于localStorage本地cache文件,模块化加载等等.
+
+localStorage本地cahce文件是什么?
+
+说这个先说模块化加载,webapp想要形成闭环一般是单页面的形式,页面切换通过监听hashchange ev">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/31/2014-04-06-控制台打印加载时间做速度优化/" title="养成使用控制台打印加载时间的习惯" itemprop="url">养成使用控制台打印加载时间的习惯</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://js250.com" title="conan">conan</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+    Updated:<time datetime="2015-01-31T07:26:17.000Z" itemprop="dateModified">1月 31 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本思路"><span class="toc-number">2.</span> <span class="toc-text">基本思路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束语"><span class="toc-number"></span> <span class="toc-text">结束语</span></a>
+		</div>
+		
+		<h3 id="前言">前言</h3>
+<p>最近在做webapp速度优化,思考各种提高加载速度的办法.包括不限于localStorage本地cache文件,模块化加载等等.</p>
+<ul>
+<li>localStorage本地cahce文件是什么?</li>
+</ul>
+<p>说这个先说模块化加载,webapp想要形成闭环一般是单页面的形式,页面切换通过监听hashchange event来监听页面切换,从而display各个页面.这样拥有更好的用户体验,但同时维护成本颇高,这个有点扯远了.<br>继续说说单页面,既然是单页面就需要把所有的静态文件给加载近来,包括css/js/front end template等,这样加载了很多冗余的文件,所以我们需要<code>模块化加载</code>了,我们不是简单的动态加载js,而且还要动态加载css&amp;front end template,当然为了提高加载速度,减少HTTP request,当然要把它们以页面为单位编译在一起,推荐使用nodejs前端工业环境<a href="http://fis.baidu.com" target="_blank" rel="external">fis</a>里面提供了很多方便的功能和组件,甚至可以自己扩展等.</p>
+<p>conan</p>
+<p>fis有一个特性可以在编译压缩时就可以根据require形成模块依赖关系表(hash map),然后我们可以根据这个表加载文件,而不是像一般的模块加载器,在浏览器里面来寻找依赖关系.</p>
+<p>有了模块化加载就好了，之后可以做我们不使用jsonp而使用ajax,获取到文件字符串,做一个localStorage缓存,另外,fis可以把文件编译成包含md5码的文件名,这个md5码根据文件内容生成,我们就可以通过md5码来判断文件是否更新,从而线上获取还是本地获取了..</p>
+<p>以上就是一点点优化心得了..</p>
+<h3 id="基本思路">基本思路</h3>
+<p>然后我们继续回到主题,通过标记各个过程所耗费的时间,从而看到哪个点花费时间较长,做更加细致的优化.而不是盲目优化,也许想象的优化和实际的效果恰恰想法,我就遇到了这种问题,自以为是的优化是我最大的错误,这也是我写这篇文章的动机.希望更多人不要重蹈覆辙.</p>
+<p>例如,以下几个过程</p>
+<ul>
+<li><p>cdn lookup+ connecting + sending+ waiting+ receiving,这些时间都可以在<code>performance.timing</code>对象里面找到,不过很多浏览器(browser)不支持.</p>
+</li>
+<li><p>然后就是页面的加载时间了,在head打一个时间戳</p>
+  <script>
+      window.PAGE_WATCH = 
+      {
+          //基础加载数据记录
+          base:
+          {
+              head: Date.now() 
+          },
+          //首页页面加载数据记录
+          index: {},
+          //频道页面加载数据记录
+          channel:{}
+      }
+  </script>
+</li>
+<li><p>css加载时间<br>然后在css前面加一个时间戳,可以统计css的加载时间,</p>
+  <script>
+      PAGE_WATCH.base.cssAfter = Date.now(); 
+  </script>
+
+</li>
+</ul>
+<p>然后页面初始化js时加一个时间戳</p>
+<pre><code>PAGE_WATCH.index.inintBefore = <span class="built_in">Date</span>.<span class="built_in">now</span>();
+</code></pre><p>其他时间戳等等.</p>
+<pre><code> <span class="comment">//.....</span>
+</code></pre><p>在页面render之后就可以在控制台里面输出了..<br>    //0个参数是打印所有,一个参数是get,2个参数是set,</p>
+<pre><code> log = <span class="function"><span class="keyword">function</span><span class="params">(name, value)</span> </span>{
+    <span class="keyword">var</span> me = <span class="keyword">this</span>;
+    <span class="keyword">var</span> maxLength = <span class="number">2</span>;
+    <span class="keyword">if</span> (!<span class="keyword">this</span>.logData) {
+    <span class="keyword">this</span>.logData = [];
+    <span class="keyword">this</span>.totalCache = $.localStorage(me.ec.action + <span class="string">'logData'</span>) || [];
+    <span class="keyword">while</span> (<span class="keyword">this</span>.totalCache.length &gt; maxLength) <span class="keyword">this</span>.totalCache.shift();
+    <span class="keyword">this</span>.totalCache.push(<span class="keyword">this</span>.logData);
+    }
+    <span class="keyword">if</span> (name !== <span class="literal">undefined</span> &amp;&amp; value !== <span class="literal">undefined</span>) {
+    <span class="keyword">if</span> (<span class="keyword">this</span>.logData.length === <span class="number">0</span> || <span class="keyword">this</span>.logData[<span class="keyword">this</span>.logData.length - <span class="number">1</span>][name] !== <span class="literal">undefined</span>) {
+            <span class="keyword">this</span>.logData.push({})
+        }
+            <span class="keyword">this</span>.logData[<span class="keyword">this</span>.logData.length - <span class="number">1</span>][name] = value;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (_.isString(name)) {
+            <span class="keyword">var</span> result = [];
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.logData.length; i++) {
+            <span class="keyword">if</span> (<span class="keyword">this</span>.logData[i][name] !== <span class="literal">undefined</span>) {
+                result.push(<span class="keyword">this</span>.logData[i][name]);
+            }
+        }
+            <span class="built_in">console</span>.log(name, result);
+            <span class="keyword">return</span> result;
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.totalCache.forEach(<span class="function"><span class="keyword">function</span><span class="params">(val, key)</span> </span>{
+            <span class="built_in">console</span>.table(val);
+        });
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.onbeforeunload) {
+                <span class="built_in">window</span>.onbeforeunload = <span class="keyword">this</span>.onbeforeunload = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{
+                    <span class="keyword">var</span> mean = <span class="number">0</span>;
+                    <span class="keyword">var</span> len = <span class="number">0</span>;
+                    me.logData.forEach(<span class="function"><span class="keyword">function</span><span class="params">(val, key)</span> </span>{
+                    <span class="keyword">if</span> (!<span class="built_in">isNaN</span>(+val[me.ec.action + <span class="string">' totoal'</span>])) {
+                    len++;
+                    mean += val[me.ec.action + <span class="string">' totoal'</span>];
+                    }
+                    });
+                    mean = mean / len;
+                    me.logData[me.logData.length - <span class="number">1</span>][me.ec.action + <span class="string">' totoal'</span>] = me.logData[me.logData.length - <span class="number">1</span>][me.ec.action + <span class="string">' totoal'</span>] + <span class="string">'-mean:'</span> + mean;
+                    me.logData[me.logData.length - <span class="number">1</span>][me.ec.action + <span class="string">' totoal'</span>] = <span class="built_in">Math</span>.round(me.logData[me.logData.length - <span class="number">1</span>][me.ec.action + <span class="string">' totoal'</span>]);
+                    $.localStorage(me.ec.action + <span class="string">'logData'</span>, me.totalCache);
+                }
+            }
+        }
+    }]
+</code></pre><h2 id="结束语">结束语</h2>
+<p>无论是开发还是优化最好是根据数据来开发,这样开发出来的网站才能又快又性能帮帮..</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://js250.com/2015/01/31/2014-04-06-控制台打印加载时间做速度优化/" data-title="养成使用控制台打印加载时间的习惯 | microConan" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/31/2014-03-28-fis核心/" title="">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/31/ipad+phone版本webapp响应时加载/"  title="ipad+phone">
+ <strong>NEXT:</strong><br/> 
+ <span>ipad+phone
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本思路"><span class="toc-number">2.</span> <span class="toc-text">基本思路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束语"><span class="toc-number"></span> <span class="toc-text">结束语</span></a>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"microsoft"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

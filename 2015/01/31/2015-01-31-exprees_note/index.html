@@ -1,0 +1,424 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>express记录 | microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="初始化
+
+1var app = require(&#39;express&#39;)();
+
+
+监听端口
+
+1app.listen(3000);
+
+
+restFul方法
+
+1234app.get(&#39;/&#39;, function(req, res){})app.post(&#39;/&#39;, function(req, res){}">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/31/2015-01-31-exprees_note/" title="express记录" itemprop="url">express记录</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://js250.com" title="conan">conan</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+    Updated:<time datetime="2015-01-31T07:26:51.000Z" itemprop="dateModified">1月 31 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+		</div>
+		
+		<ul>
+<li>初始化</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = <span class="built_in">require</span>(<span class="string">'express'</span>)();</div></pre></td></tr></table></figure>
+
+<ul>
+<li>监听端口</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.<span class="keyword">listen</span>(<span class="number">3000</span>);</div></pre></td></tr></table></figure>
+
+<ul>
+<li>restFul方法</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.<span class="keyword">get</span>(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span></span>{})</div><div class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span></span>{})</div><div class="line">app.put(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span></span>{})</div><div class="line">app.<span class="keyword">delete</span>(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span></span>{})</div></pre></td></tr></table></figure>
+
+<ul>
+<li>一般mvc方法</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.<span class="keyword">use</span>(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req,res,next)</span></span>{})</div></pre></td></tr></table></figure>
+
+<ul>
+<li>app.use可以挂载另一个app</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.<span class="keyword">use</span>(<span class="string">'/'</span>, express())</div></pre></td></tr></table></figure>
+
+<ul>
+<li>参数配置</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.<span class="keyword">set</span>(<span class="string">'name'</span>, <span class="string">'conan'</span>);</div><div class="line">app.<span class="keyword">get</span>(<span class="string">'name'</span>);<span class="comment">//conan</span></div><div class="line"><span class="comment">//反向代理</span></div><div class="line">app.disable(<span class="string">'trust proxy'</span>);</div></pre></td></tr></table></figure>
+
+<ul>
+<li>创建静态服务器目录</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GET /javascripts/jquery.js</span></div><div class="line"><span class="comment">// GET /style.css</span></div><div class="line"><span class="comment">// GET /favicon.ico</span></div><div class="line"><span class="comment">//将/public设为静态目录</span></div><div class="line">app.<span class="keyword">use</span>(express.<span class="keyword">static</span>(__dirname + '/<span class="keyword">public</span>'));</div></pre></td></tr></table></figure>
+
+<p>-如果希望<code>static</code>前缀的请求才去<code>/public</code>返回静态文件，则可以：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GET /static/javascripts/jquery.js</span></div><div class="line"><span class="comment">// GET /static/style.css</span></div><div class="line"><span class="comment">// GET /static/favicon.ico</span></div><div class="line">app.<span class="keyword">use</span>('/<span class="keyword">static</span>', express.<span class="keyword">static</span>(__dirname + '/<span class="keyword">public</span>'));</div></pre></td></tr></table></figure>
+
+<ul>
+<li>app.use方法是很重要的方法，当客户端过来一个请求时，它能按照你调用的顺序，调用这些方法，这些方法可以称之为<code>中间件(middleware)</code>。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">app.<span class="keyword">use</span>(express.<span class="keyword">static</span>(__dirname + <span class="string">'/public'</span>));</div><div class="line">app.<span class="keyword">use</span>(logger());</div><div class="line">app.<span class="keyword">use</span>(<span class="function"><span class="keyword">function</span><span class="params">(req, res)</span></span>{</div><div class="line">  res.send(<span class="string">'Hello'</span>);</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<ul>
+<li>你可以根据文件后缀注册对应的模板引擎</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//test.jade使用jade引擎解析</span></div><div class="line">app.engine(<span class="string">'jade'</span>, <span class="keyword">require</span>(<span class="string">'jade'</span>).__express);</div><div class="line"><span class="comment">//html文件使用ejs解析</span></div><div class="line">app.engine(<span class="string">'html'</span>, <span class="keyword">require</span>(<span class="string">'ejs'</span>).renderFile);</div><div class="line"><span class="comment">//默认使用tpl后缀，其作用是在调用res.render('index', {name:'conan'})时，默认解析index.tpl，根据tpl后缀来使用对应的函数</span></div><div class="line">app.<span class="keyword">set</span>(<span class="string">'view engine'</span>, <span class="string">'tpl'</span>);</div></pre></td></tr></table></figure>
+
+<ul>
+<li>express的模板缓存和所用模板引擎的缓存是不同的。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//这个是express缓存，仅仅缓存了查找的模板path路径，参数等</span></div><div class="line">app<span class="built_in">.</span><span class="built_in">set</span>(<span class="string">'view cache'</span>, <span class="literal">false</span>);</div><div class="line"><span class="comment">// To disable Swig's cache, do the following:</span></div><div class="line"><span class="comment">//这是swig的缓存，默认可以把解析后的模板缓存在memory里面</span></div><div class="line">swig<span class="built_in">.</span>setDefaults({ <span class="keyword">cache</span>: <span class="literal">false</span> });</div></pre></td></tr></table></figure>
+
+<ul>
+<li>req.param是存储app.use(‘/user/:id’)这种形式里面req.param.id</li>
+<li>req.query是存储/?name=conan这种形式req.query.name是conan</li>
+<li>req.body是存储post请求里面，比如a=1</li>
+<li>req.files是存储post上传的文件</li>
+<li>req.cookies存储cookie键值对，由cookieParser中间件提供</li>
+<li>req.signedCookies存储签名后的cookies键值对，由cookieParser中间件提供</li>
+<li>req.path是端口之后?之前的字段</li>
+<li>req.url则是端口之后所有字段</li>
+<li>无论req.path和req.url都是截取了app.use函数第一个参数之后的值</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//用户访问host.com/<span class="keyword">index</span>/conan/zhang</div><div class="line">app.<span class="keyword">use</span>(<span class="string">'/index'</span>, funciton(req, res, <span class="keyword">next</span>){</div><div class="line">    <span class="regexp">//print</span> /connan/zhang /conan/zhang /<span class="keyword">index</span></div><div class="line">    console.<span class="keyword">log</span>(req.url, req.path, req.bashUrl);</div><div class="line">    <span class="keyword">next</span>();</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<ul>
+<li>req.host请求的host不含端口号</li>
+<li>req.fresh返回通过<code>etag</code>和<code>Last-Modified</code>比较是否相同</li>
+<li>res.cookie(‘rememberme’, ‘1’, { expires: new Date(Date.now() + 900000), httpOnly: true });设置cookie</li>
+<li>res.clearCookie(‘name’, { path: ‘/admin’ });</li>
+<li>res.redirect([status], url)，重定向status默认302</li>
+<li>res.charset = ‘value’;设置字符集</li>
+<li>res.send(404, ‘Sorry, we cannot find that!’);发送响应</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">res.<span class="keyword">send</span>(new Buffer(<span class="string">'whoop'</span>));</div><div class="line">res.<span class="keyword">send</span>({ some: <span class="string">'json'</span> });</div><div class="line">res.<span class="keyword">send</span>(<span class="string">'some html'</span>);</div><div class="line">res.<span class="keyword">send</span>(<span class="number">404</span>, <span class="string">'Sorry, we cannot find that!'</span>);</div><div class="line">res.<span class="keyword">send</span>(<span class="number">500</span>, { error: <span class="string">'something blew up'</span> });</div><div class="line">res.<span class="keyword">send</span>(<span class="number">200</span>);</div><div class="line"><span class="regexp">//json</span></div><div class="line">res.<span class="keyword">send</span>({ user: <span class="string">'tobi'</span> })</div><div class="line">res.<span class="keyword">send</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</div></pre></td></tr></table></figure>
+
+<ul>
+<li>res.jsonp,获取query里面的callback的值返回jsonp</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ?callback=foo</span></div><div class="line">res<span class="class">.jsonp</span>({ user<span class="value">: <span class="string">'tobi'</span> })</span></div><div class="line">// =&gt; <span class="function">foo</span>({ <span class="string">"user"</span>: <span class="string">"tobi"</span> })</div><div class="line">app.<span class="function">set</span>(<span class="string">'jsonp callback name'</span>, <span class="string">'cb'</span>);</div><div class="line"><span class="comment">// ?cb=foo</span></div><div class="line">res<span class="class">.jsonp</span>(500, { error<span class="value">: <span class="string">'message'</span> })</span></div><div class="line">// =&gt; <span class="function">foo</span>({ <span class="string">"error"</span>: <span class="string">"message"</span> })</div></pre></td></tr></table></figure>
+
+<ul>
+<li>req.param(‘name’)，按照以下顺序查找</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//直接访问 req.body, req.params, 和 req.<span class="keyword">query</span> 应该更合适，除非你真的需要从这几个对象里同时接受输入。</div><div class="line">req.params</div><div class="line">req.body</div><div class="line">req.<span class="keyword">query</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>req.get(‘method’)，获取请求头里面的信息例如<code>status</code>、<code>method</code>、<code>Cache-Control</code></li>
+<li>req.accepts(types).检查给定的types 是不是可以接受类型，当可以接受时返回最匹配的，否则返回undefined - 这个时候你应该响应一个406 “Not Acceptable”.type 的值可能是单一的一个mime类型字符串,比如 “application/json”, 扩展名为”json”, 也可以为逗号分隔的列表或者数组。当给定的是数组或者列表，返回最佳匹配的。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">/<span class="regexp">/ Accept: text/html</span></div><div class="line">req.accepts(<span class="string">'html'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; <span class="string">"html"</span></div><div class="line"></div><div class="line">/<span class="regexp">/ Accept: text/</span>*, application/json</div><div class="line">req.accepts(<span class="string">'html'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; <span class="string">"html"</span></div><div class="line">req.accepts(<span class="string">'text/html'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; <span class="string">"text/html"</span></div><div class="line">req.accepts(<span class="string">'json, text'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; <span class="string">"json"</span></div><div class="line">req.accepts(<span class="string">'application/json'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; <span class="string">"application/json"</span></div><div class="line"></div><div class="line">/<span class="regexp">/ Accept: text/</span>*, application/json</div><div class="line">req.accepts(<span class="string">'image/png'</span>);</div><div class="line">req.accepts(<span class="string">'png'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; undefined</div><div class="line"></div><div class="line">/<span class="regexp">/ Accept: text/</span>*;q=.<span class="number">5</span>, application/json</div><div class="line">req.accepts([<span class="string">'html'</span>, <span class="string">'json'</span>]);</div><div class="line">req.accepts(<span class="string">'html, json'</span>);</div><div class="line"><span class="regexp">//</span> =&gt; <span class="string">"json"</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>req.accepted返回可以接受的类型从高质量到低质量</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">res</span>.render(<span class="keyword">view</span>, [locals], callback)</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>app.param(parameter, fn)</code>是不好理解的一个点，它可以在你<code>path</code>匹配结果里面的参数做处理。<br>  举例来说用户删除id的地址是<code>/user/delete/id</code>，用户新增id的地址是<code>user/add/id</code>，然后注册分别是<code>app.use(&#39;/user/delete/:id&#39;)</code>和<code>app.use(&#39;user/add/:id&#39;)</code>，这时候他们都有需要去数据库获取id信息的一个业务操作，这时候我们可以把他们集中在一个函数里面操作，这时候可以”监听参数id”来实现了，就是当用户请求的path命中<code>id</code>参数时，我们可以调用个函数。这时候就可以用<code>app.param(parameter,fn)</code>了,参数<code>parameter</code>使用监听的参数(如id)，而<code>fn</code>则是要会掉的函数。我们可以把根据id来把用户信息获取出来保存在<code>req</code>里面给后面的<code>app.use</code>绑定的函数来处理。也就是说<code>app.use</code>可以绑定path回调，而<code>app.param</code>则可以绑定app.use的参数回调.</p>
+<p>  特别的，可以用<code>app.param(fn1)</code>，这个函数可以预处理<code>app.param(id, fn2)</code>过来的fn2，我们可以用，例如</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app.param(<span class="function"><span class="keyword">function</span><span class="params">(name, fn)</span></span>{</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(req,res,next)</span></span>{</div><div class="line">        req.params.id = name + fn;</div><div class="line">        <span class="built_in">next</span>();</div><div class="line">    }    </div><div class="line">})</div><div class="line">app.param(<span class="string">'id'</span>,<span class="number">2</span>);</div><div class="line">app.use(<span class="string">'/user/:id'</span>, <span class="function"><span class="keyword">function</span><span class="params">(req, res,next)</span></span>{</div><div class="line">    console.log(req.params.id);    </div><div class="line">    res.<span class="keyword">end</span>(<span class="string">'hello conan'</span>);</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<ul>
+<li>所有中间件调用都会被try catch，一旦报错就开始训寻找有4个参数的中间件，否则就曝出错误信息</li>
+<li>谨慎在中间件使用setTimeout来操作，因为里面的错误无法被捕捉到</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://js250.com/2015/01/31/2015-01-31-exprees_note/" data-title="express记录 | microConan" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/31/2014-03-28-基于fis扩展的fis-plus/" title="">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/31/2015-01-30-huihui/"  title="Because of love">
+ <strong>NEXT:</strong><br/> 
+ <span>Because of love
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"microsoft"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

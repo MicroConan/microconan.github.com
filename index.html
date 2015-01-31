@@ -1,0 +1,384 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="好好学习，天天向上">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main">
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-03-28-git-入门/" title="git入门" itemprop="url">
+  
+    <h1 itemprop="name">git入门</h1>
+    
+     
+           <p itemprop="description" >git和svn不同的地方有一个索引的概念，需要把修改点提交到索引，之后在提交索引到仓库。
+1、语句设置默认。
+git config --global user.name &#39;conan&#39;    
+等语句设置默认。 2、建立仓库。
+git init    
+ 3、添加修改到索引
+gi</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-03-28-fis核心/" title="" itemprop="url">
+  
+    <h1 itemprop="name"></h1>
+    
+     
+           <p itemprop="description" >前言
+本文以对fis、甚至对前端无任何了解的人的角度讲解fis这三个字母用来干嘛的。。。
+fis用来干嘛？
+说专业点是一个前端集成开发环境，官网上的内容我就不赘述了。
+
+说通俗点就是利用nodejs按要求(通过fis-conf.js配置)把开发目录经过一系列处理（例如合并压缩）处</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-04-06-控制台打印加载时间做速度优化/" title="养成使用控制台打印加载时间的习惯" itemprop="url">
+  
+    <h1 itemprop="name">养成使用控制台打印加载时间的习惯</h1>
+    
+     
+           <p itemprop="description" >前言
+最近在做webapp速度优化,思考各种提高加载速度的办法.包括不限于localStorage本地cache文件,模块化加载等等.
+
+localStorage本地cahce文件是什么?
+
+说这个先说模块化加载,webapp想要形成闭环一般是单页面的形式,页面切换通过监听has</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="page" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/ipad+phone版本webapp响应时加载/" title="ipad+phone" itemprop="url">
+  
+    <h1 itemprop="name">ipad+phone</h1>
+    
+     
+           <p itemprop="description" >为什么重构、合并？
+
+更方便维护，一份代码2个设备端
+ipad迁入fis2
+phone基于更加紧凑的逻辑实现ipad版架构来重构，
+组件化可重用
+减少人力浪费；
+
+同一个功能2个端实现：
+
+2人独自开发：有人力时间浪费，例如开发搜索结果页，超过90%功能相同，但是2个人各自想了一</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-03-28-基于fis扩展的fis-plus/" title="" itemprop="url">
+  
+    <h1 itemprop="name"></h1>
+    
+     
+           <p itemprop="description" >扩展了些什么？
+
+fis-plus也是调用fis模块
+fis-plus是添加了一些推荐的文件夹规范和fis配置（fis-conf.js）
+
+
+也就是fis-plus的一些规范，例如将页面tpl文件(page)发布(release)到template文件夹，将widget下面的js</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2015-01-31-exprees_note/" title="express记录" itemprop="url">
+  
+    <h1 itemprop="name">express记录</h1>
+    
+     
+           <p itemprop="description" >初始化
+
+1var app = require(&#39;express&#39;)();
+
+
+监听端口
+
+1app.listen(3000);
+
+
+restFul方法
+
+1234app.get(&#39;/&#39;, function(req, res){})app.post(&#39;/&#39;, function(r</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2015-01-30-huihui/" title="Because of love" itemprop="url">
+  
+    <h1 itemprop="name">Because of love</h1>
+    
+     
+           <p itemprop="description" >慧慧不用担心生活的压力，因为有我
+我了解慧慧！且依然爱她
+为慧慧做一个暖男我愿意
+慧慧不会担心我看看她手机
+慧慧只需专注工作，不用担心其他事情
+慧慧可以为优秀的男朋友而自豪
+慧慧的生活可以随时随地更多选择(旅游、学习、工作)因为有我
+慧慧再也不用担心男朋友离开，只有选择离开男朋友</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-05-25-fis发布流程/" title="" itemprop="url">
+  
+    <h1 itemprop="name"></h1>
+    
+     
+           <p itemprop="description" >描述fis release的执行过程
+使用命令查看npm安装目录：npm config get prefix
+
+建议安装`phpstorm`或者`webstorm`来调试`nodejs`代码
+
+执行fis release
+
+寻找遍历$PATH路径
+
+进入npm/bin/fis（这</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-03-29-前端跨域POST数据/" title="前端跨域POST提交解决方案" itemprop="url">
+  
+    <h1 itemprop="name">前端跨域POST提交解决方案</h1>
+    
+     
+           <p itemprop="description" >前言
+咱们说的跨域POST提交解决方案，注意这里是POST提交数据，比如表单提交，所以这时候别跟我说SCRIPT标签实现JSONP什么的。想要实现POST提交数据无非2种：
+
+1、是服务端允许你跨域。 
+2、其实就是想办法和需要跨的域名下的页面通信。
+
+conan
+1、跨域资源共</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/01/31/2014-04-12-团队技术建设/" title="团队技术建设" itemprop="url">
+  
+    <h1 itemprop="name">团队技术建设</h1>
+    
+     
+           <p itemprop="description" >轮流制演讲
+目的
+
+促进团队技术进步,充分发现个人亮点,督促主动了解新东东
+
+要求
+分享促进产品项目进步的点子
+目的
+
+充分发挥个人创意,一些PM可能想不到,只有前端工程师才能想到的表达出来,一起讨论是否可用,从而实现在项目中.
+
+要求
+
+提出一个页面特效可以用在产品中,如天气预</p>
+        
+    
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+  </a>
+</section>
+
+
+  <nav id="page-nav" class="clearfix">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+
+
+
+  </body>
+ </html>

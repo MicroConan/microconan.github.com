@@ -1,0 +1,486 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="描述fis release的执行过程
+使用命令查看npm安装目录：npm config get prefix
+
+建议安装`phpstorm`或者`webstorm`来调试`nodejs`代码
+
+执行fis release
+
+寻找遍历$PATH路径
+
+进入npm/bin/fis（这个是软链接到npm/">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/31/2014-05-25-fis发布流程/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://js250.com" title="conan">conan</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-31T07:24:24.000Z" itemprop="datePublished">1月 31 2015</time>
+    Updated:<time datetime="2015-01-31T07:26:42.000Z" itemprop="dateModified">1月 31 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+		</div>
+		
+		<p>描述<code>fis release</code>的执行过程</p>
+<p>使用命令查看npm安装目录：<code>npm config get prefix</code></p>
+<p><img src="../assets/img/fisfolder.png" alt="release "></p>
+<pre><code>建议安装<span class="escape">`p</span>hpstorm<span class="escape">`或</span>者<span class="escape">`w</span>ebstorm<span class="escape">`来</span>调试<span class="escape">`n</span>odejs<span class="escape">`代</span>码
+</code></pre><ul>
+<li><p>执行<code>fis release</code></p>
+</li>
+<li><p>寻找遍历<code>$PATH</code>路径</p>
+</li>
+<li><p>进入npm/bin/fis（这个是软链接到npm/lib/node_modules/fis/bin/fis);</p>
+</li>
+<li><p><code>require(&#39;../fis.js&#39;).cli.run(process.argv)</code></p>
+</li>
+</ul>
+<blockquote>
+<p>可以看成<code>require(&#39;../fis.js&#39;)</code>引入fis.js，</p>
+</blockquote>
+<p>执行<code>fis.js</code>时引入核心模块<code>fis-kernel</code>模块，在此模块引入<code>config</code>，模块（这里就是我们使用<code>fis-conf-js</code>里面所用到的方法）赋值给<code>fis.config</code>对象，引入其他方法，执行定义<code>fis.cli.run</code>方法，执行该方法，</p>
+<p>简单讲一下<code>require</code>加载机制</p>
+<p><img src="../assets/img/requireprocess.jpg" alt="release "></p>
+<p>如果是<code>require(&#39;fis-kernel&#39;)</code>就算逐渐向上查找模块。</p>
+<p>引入<code>commander</code><a href="https://github.com/visionmedia/commander.js" target="_blank" rel="external">https://github.com/visionmedia/commander.js</a></p>
+<p>通过commander绑定命令监听(cd /Users/zhangnan/develop/Dropbox/code/testcommander node index.js conan -s hello)</p>
+<p>引入<code>fis-command-release</code>模块（此模块主要用于使用commander接口进行注册）</p>
+<p>调用<code>fis-command-release</code>模块的<code>register</code>方法传入<code>commander</code>模块，register方法主要是在使用<code>commander</code>模块，<br>执行action传入的方法<br>先寻找fis-conf.js文件，<br>判断是否传入<code>live</code>参数，<br>判断<code>md5</code>，<br>判断<code>watch</code>,传入则调用<code>chokidar</code>模块（<a href="https://github.com/paulmillr/chokidar），" target="_blank" rel="external">https://github.com/paulmillr/chokidar），</a><br>监听项目下的所有文件，时排除掉配置文件（fis-conf.js），因为监听这个文件就不可控了。</p>
+<pre><code>chokidar.<span class="keyword">on</span>(<span class="string">'add'</span>, listener).<span class="keyword">on</span>(<span class="string">'change'</span>, listener).<span class="keyword">on</span>(<span class="string">'unlink'</span>, listener)
+</code></pre><p>调用<code>fis-kernal</code>模块下面的<code>release.js</code>模块,<br>这里是流程的关键部分了…<br>首先构建文件系统(file system)</p>
+<pre><code>    <span class="keyword">var</span> ret = {
+    src : fis.project.getSource(), <span class="comment">//递归获取当前目录下所有的文件，不包括`output`和`fis-conf.js`，</span>
+    <span class="comment">//每个文件实例化一个File对象（在fis-kernal模块里面），以文件地址(例如：/common/main.js)为KEY保存一个个File对象，key保存的属性如下图。</span>
+
+    ids : {},
+    pkg : {},
+    <span class="comment">//这就是map资源表了</span>
+    <span class="built_in">map</span> : {
+        res : {},
+        pkg : {}
+    }
+};
+</code></pre><p><img src="../assets/img/fileobject.jpg" alt="Alt text"><br><code>File</code>对象里面各种路径判断都做了例如<code>path</code>替换<br>调用<code>fis-kernal</code>里面的’file.js’里面的<code>replaceProperties</code>里面调用了一下</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">roadmap</span><span class="params">(subpath, path, obj)</span></span>{
+    <span class="comment">//获取`roadmap.path`数组列表</span>
+    <span class="keyword">var</span> map = fis.config.<span class="keyword">get</span>(<span class="string">'roadmap.'</span> + path, []);
+    <span class="comment">//从第一个逐个匹配        </span>
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, len = map.length; i &lt; len; i++){
+        <span class="keyword">var</span> opt = map[i], reg = opt.reg;
+        <span class="keyword">if</span>(reg){
+            <span class="keyword">if</span>(<span class="keyword">typeof</span> reg === <span class="string">'string'</span>){
+                reg = fis.util.glob(replaceDefine(reg, <span class="literal">true</span>));
+            } <span class="keyword">else</span> <span class="keyword">if</span>(!fis.util.<span class="keyword">is</span>(reg, <span class="string">'RegExp'</span>)){
+                fis.log.error(<span class="string">'invalid regexp ['</span> + reg + <span class="string">'] of [roadmap.'</span> + path + <span class="string">'.'</span> + i + <span class="string">']'</span>);
+            }
+            <span class="keyword">var</span> matches = subpath.match(reg);
+            <span class="keyword">if</span>(matches){
+                obj = obj || {};
+                <span class="comment">//此方法如下replaceMatches，替换里面的变量`$&amp;`或者$1等</span>
+                replaceProperties(opt, matches, obj);
+                <span class="keyword">delete</span> obj.reg;
+                <span class="keyword">return</span> obj;
+            }
+        } <span class="keyword">else</span> {
+            fis.log.error(<span class="string">'[roadmap.'</span> + path + <span class="string">'.'</span> + i + <span class="string">'] missing property [reg].'</span>);
+        }
+    }
+    <span class="keyword">return</span> <span class="literal">false</span>;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">replaceMatches</span><span class="params">(value, matches)</span></span>{
+    <span class="keyword">return</span> value.replace(/\$(\d+|&amp;)/g, <span class="function"><span class="keyword">function</span><span class="params">(all, $1)</span></span>{
+        <span class="keyword">return</span> matches[$<span class="number">1</span> === <span class="string">'&amp;'</span> ? <span class="string">'0'</span> : $<span class="number">1</span>] || all;
+    });
+}
+</code></pre><p><img src="../assets/img/preprotyrerepace.png" alt="Alt text"></p>
+<p>之后查看<code>release</code>，下次遇到我们直接可以看代码了</p>
+<pre><code><span class="keyword">if</span>(<span class="keyword">this</span>.release === <span class="literal">false</span>){
+        <span class="keyword">this</span>.useMap = <span class="literal">false</span>;
+        <span class="keyword">var</span> self = <span class="keyword">this</span>;
+        <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>, <span class="string">'url'</span>, {
+            enumerable : <span class="literal">true</span>,
+            get : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+                <span class="comment">//这个错误可能经常看到。。因为没release</span>
+                fis.log.error(<span class="string">'unreleasable file ['</span> + self.realpath + <span class="string">']'</span>);
+            }
+        });
+    } 
+</code></pre><p>之后遍历<code>map</code>列表，进行单文件编译(fis-kernal/lib/compile.js)。</p>
+<pre><code>function process(<span class="keyword">file</span>){
+    <span class="keyword">if</span>(<span class="keyword">file</span>.useParser !== <span class="keyword">false</span>){
+        pipe(<span class="keyword">file</span>, <span class="string">'parser'</span>, <span class="keyword">file</span>.ext);
+    }
+    <span class="keyword">if</span>(<span class="keyword">file</span>.rExt){
+        <span class="keyword">if</span>(<span class="keyword">file</span>.usePreprocessor !== <span class="keyword">false</span>){
+            pipe(<span class="keyword">file</span>, <span class="string">'preprocessor'</span>, <span class="keyword">file</span>.rExt);
+        }
+        <span class="keyword">if</span>(<span class="keyword">file</span>.useStandard !== <span class="keyword">false</span>){
+            standard(<span class="keyword">file</span>);
+        }
+        <span class="keyword">if</span>(<span class="keyword">file</span>.usePostprocessor !== <span class="keyword">false</span>){
+            pipe(<span class="keyword">file</span>, <span class="string">'postprocessor'</span>, <span class="keyword">file</span>.rExt);
+        }
+        <span class="keyword">if</span>(exports.settings.lint &amp;&amp; <span class="keyword">file</span>.useLint !== <span class="keyword">false</span>){
+            pipe(<span class="keyword">file</span>, <span class="string">'lint'</span>, <span class="keyword">file</span>.rExt, <span class="keyword">true</span>);
+        }
+        <span class="keyword">if</span>(exports.settings.test &amp;&amp; <span class="keyword">file</span>.useTest !== <span class="keyword">false</span>){
+            pipe(<span class="keyword">file</span>, <span class="string">'test'</span>, <span class="keyword">file</span>.rExt, <span class="keyword">true</span>);
+        }
+        <span class="keyword">if</span>(exports.settings.optimize &amp;&amp; <span class="keyword">file</span>.useOptimizer !== <span class="keyword">false</span>){
+            pipe(<span class="keyword">file</span>, <span class="string">'optimizer'</span>, <span class="keyword">file</span>.rExt);
+        }
+    }
+}
+</code></pre><p>然后调用<code>pipe</code>方法，获取<code>模块</code>还是<code>函数</code></p>
+<pre><code> <span class="comment">//package callback</span>
+<span class="keyword">var</span> cb = <span class="function"><span class="keyword">function</span><span class="params">(packager, settings, key)</span></span>{
+    fis.log.debug(<span class="string">'['</span> + key + <span class="string">'] start'</span>);
+    <span class="comment">//自己写插件或者函数可以看到这个传入的参数</span>
+    packager(ret, conf, settings, opt);
+    fis.log.debug(<span class="string">'['</span> + key + <span class="string">'] end'</span>);
+};
+
+_.pipe = <span class="function"><span class="keyword">function</span><span class="params">(type, callback, def)</span></span>{
+    <span class="comment">//获取在config里面的module设置</span>
+    <span class="keyword">var</span> processors = fis.config.<span class="keyword">get</span>(<span class="string">'modules.'</span> + type, def);
+    <span class="keyword">if</span>(processors){
+        <span class="keyword">var</span> typeOf = <span class="keyword">typeof</span> processors;
+        <span class="comment">//可以传入字符串</span>
+        <span class="keyword">if</span>(typeOf === <span class="string">'string'</span>){
+            processors = processors.trim().split(/\s*,\s*/);
+        <span class="comment">//也可以是function</span>
+        } <span class="keyword">else</span> <span class="keyword">if</span>(typeOf === <span class="string">'function'</span>){
+            processors = [ processors ];
+        }
+        type = type.split(<span class="string">'.'</span>)[<span class="number">0</span>];
+        processors.forEach(<span class="function"><span class="keyword">function</span><span class="params">(processor, index)</span></span>{
+            <span class="keyword">var</span> typeOf = <span class="keyword">typeof</span> processor, key;
+            <span class="comment">//如果是模块就尝试获取,例如`fis-packager-map`</span>
+            <span class="keyword">if</span>(typeOf === <span class="string">'string'</span>){
+                key = type + <span class="string">'.'</span> + processor;
+                processor = fis.require(type, processor);
+            } <span class="keyword">else</span> {
+                key = type + <span class="string">'.'</span> + index;
+            }
+            <span class="keyword">if</span>(<span class="keyword">typeof</span> processor === <span class="string">'function'</span>){
+                <span class="comment">//获取参数里面的配置</span>
+                <span class="keyword">var</span> settings = fis.config.<span class="keyword">get</span>(<span class="string">'settings.'</span> + key, {});
+                <span class="keyword">if</span>(processor.defaultOptions){
+                    settings = _.merge(processor.defaultOptions, settings);
+                }
+                <span class="comment">//processor可能是模块，也可能是传入的函数</span>
+                callback(processor, settings, key);
+            } <span class="keyword">else</span> {
+                fis.log.warning(<span class="string">'invalid processor [modules.'</span> + key + <span class="string">']'</span>);
+            }
+        });
+    }
+};
+</code></pre><p>各个环节调用完成,回调这个函数<code>deploy</code>一下</p>
+<pre><code>       fis.release(opt, <span class="function"><span class="keyword">function</span><span class="params">(ret)</span></span>{
+            process.stdout.write(
+                (opt.verbose ? <span class="string">''</span> : <span class="string">' '</span>) +
+                (<span class="built_in">Date</span>.now() - start + <span class="string">'ms'</span>).bold.green + <span class="string">'\n'</span>
+            );
+            <span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> collection){
+                <span class="keyword">if</span>(collection.hasOwnProperty(item)){
+                    <span class="keyword">if</span>(opt.unique){
+                        time(fis.compile.clean);
+                    }
+                    deploy(opt, collection);
+                    deploy(opt, ret.pkg);
+                    collection = {};
+                    <span class="keyword">return</span>;
+                }
+            }
+        });
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://js250.com/2015/01/31/2014-05-25-fis发布流程/" data-title="microConan" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/31/2015-01-30-huihui/" title="Because of love">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Because of love</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/31/2014-03-29-前端跨域POST数据/"  title="前端跨域POST提交解决方案">
+ <strong>NEXT:</strong><br/> 
+ <span>前端跨域POST提交解决方案
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"microsoft"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
