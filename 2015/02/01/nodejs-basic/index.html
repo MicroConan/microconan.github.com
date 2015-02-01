@@ -1,0 +1,457 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>node.js学习笔记 | microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="写在前面
+
+这是我一开始接触nodejs时写evernote里面的笔记，最近把blog迁到hexo上来，顺便加进来，读者看起来可能没有什么逻辑性，请谅解。
+
+异步
+
+node处理异步回调时的异常上形成一种约定，将异常作为第一个实参穿回，如果为空值，则表明异步调用没有异常抛出。setImmedia和p">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/02/01/nodejs-basic/" title="node.js学习笔记" itemprop="url">node.js学习笔记</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://js250.com" title="conan">conan</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-02-01T05:43:59.000Z" itemprop="datePublished">2月 1 2015</time>
+    Updated:<time datetime="2015-02-01T05:59:27.000Z" itemprop="dateModified">2月 1 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#异步"><span class="toc-number">2.</span> <span class="toc-text">异步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stream流"><span class="toc-number">3.</span> <span class="toc-text">stream流</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic认证"><span class="toc-number"></span> <span class="toc-text">basic认证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#模板"><span class="toc-number">1.</span> <span class="toc-text">模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#玩转进程"><span class="toc-number">2.</span> <span class="toc-text">玩转进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#node代码"><span class="toc-number">3.</span> <span class="toc-text">node代码</span></a></li></ol>
+		</div>
+		
+		<h4 id="写在前面">写在前面</h4>
+<blockquote>
+<p>这是我一开始接触nodejs时写<code>evernote</code>里面的笔记，最近把blog迁到<code>hexo</code>上来，顺便加进来，读者看起来可能没有什么逻辑性，请谅解。</p>
+</blockquote>
+<h4 id="异步">异步</h4>
+<ul>
+<li><p>node处理异步回调时的异常上形成一种约定，将异常作为第一个实参穿回，如果为空值，则表明异步调用没有异常抛出。<br>setImmedia和process.nextTick(fn)（执行更快）作为setTimeout(fn,0)替代<br>buffer</p>
+</li>
+<li><p>每个Buffer对象最小是8kb（slab单元），小于它时也会分配8kb的空间，再次建立一个Buffer对象时如果剩余的足够分配就是用剩余的，否则新建一个单元空间。<br>已经支持的类型ASCII|utf-8|utf=16le/ucs-2|Base64|Binary|Hex<br>其他类型使用iconv-lite（js）或者使用Iconv(js+c)来对Buffer编码转换<br>Buffer写入时大小由起始传入大小决定，或者传入数字大小决定,超出时前面部分会被覆盖出来。</p>
+</li>
+<li>buffer的setEncode(‘utf-8’)能解决大部分的乱码问题，但不能从根本上解决，得使用Buffer.concat(chunk,size);</li>
+<li>请求返回数据(response)时使用Buffer效率明显更高，保存成buffer的静态格式直接读取输出更加合理。</li>
+</ul>
+<h4 id="stream流">stream流</h4>
+<ul>
+<li>stream对象是nodejs里面很常用的对象，它是events.EventEmitter的实例，有data事件，有readable、data、close、end、error等事件<br>stream是可以是可读的，用来接收数据和pipe发送数据给另一个stream，触发data和end和close事件<br>stream可以是可写的，用write和end方法，也可以pipe数据，没有data和end事件。<br>pipe管道的意义是连续的输送数据，有stream（流）的意义，有一点送一点，连续不断。而不是收到之后在转送。这个需要等待。</li>
+<li><p>request就是一个可读流+可写流。<br>http.createServer(function(request,response){})，上面的request是请求流(request stream)，response是返回流(response stream)，用request来接收数据，用response来返回数据，在request流监听data事件来接收内容，待request触发end事件时，说明request流已经传输完毕，这时候可以用response来write一些数据了。<br>fs模块、net模块、http模块都有对象继承自它<br>http</p>
+</li>
+<li><p>http继承自net模块<br>一个http的server可以与多个客户端连接，从而占用更少的内存，所以能承受高并发。<br>一个http请求过来时经过http_parser解析请求头，method、url、httpVersion直接放在request里面，而其他都放在request.headers对象里。<br>response可以调用setHeader(‘Content-Type’,’javascript/text’)方法或者writeHead(200, {‘Content-Type’: ‘javascript/text’})来设置响应头。<br>response可用调用write(data)，或者调用end(data)来写返回体。<br>完成之后一定要调用response.end()方法，否则客户端会一直处于等待状态。<br>web应用</p>
+</li>
+<li><p>一个网站过程，请求get、post、put、delete等，建立tcp连接三次握手，rquest请求头，查询完成之后返回消息头(response header)，通过解析路径获取到路径(router)、查询字符串(query)、cookie，通过router(一般情况)进入对应的控制器（mvc），通过cookie和query信息从数据库里面取到内容，通过模板(teamplate)拼装好返回内容（response body），浏览器获取到内容之后建立DOM树，绘制页面，解析javascript。<br>静态文件使用其他域名的好处除了增加并发数以外还有减少cookie传输，太多也不好提增加dns查找。<br>记录状态的有cookie和session，session是在客户端的cookie建立唯一的key值，映射服务端的数据，且这个key设定了超时时间。如果禁用了cookie则可以使用query来设定key，最后一种比较有趣的方法是利用Etag来设置。<br>session的数据存在内存中，多核CUP可以运行多个进程，他们的内存不是共享的。所以需要Redis、Memcached等把session集中化。<br>cookie</p>
+</li>
+<li><p>cookie通过response.setHeader方法设置，要获取现有的进行添加来设置，否则会本次代码之前设置的cookie。</p>
+</li>
+<li><p>cookie通过request.headers.cookie获取。<br>重点：请求头(request header)全部都可以在request.headers里面获取到和控制台里面看到的一样，只是把key换成小写而已，设置时需要通过setHeader或者writeHeader来设置。<br>缓存</p>
+</li>
+<li><p>If-Modified-Since/Last-modified:检查request里面的If-modified-Since，相同则返回304，否则给response添加last-Modified头信息并且返回数据。<br>If-None-Match/Etag：检查request里面的if-none-match的值与当前文件的内容通过cryto.createHash(‘sha1’)生成的字符对比，相同则直接返回304，否则给response添加当前的hash并且返回内容。</p>
+</li>
+<li>如果设置了Expires或者Cache-Control（http1.0不支持）且没有过期，命中cache的情况下会如果是在地址栏输入会from cache不去发起请求，如果强刷（如ctrl+r）会发起请求，但是如果没有修改会返回304内容未修改，如果已经改变则返回新内容。<br>当然如果在控制台里面选中了disable cahce则无论如何都会请求最新内容，因为<br>不会检查本地是否有缓存。</li>
+<li>请求头信息(request header)既没有If-Modified-Since也没有If-None-Match来让服务端判断。<br>如何清理缓存呢？<br>因为浏览器根据url来判断进行缓存，1、修改文件名称。2、加时间戳。</li>
+</ul>
+<h3 id="basic认证">basic认证</h3>
+<ul>
+<li><p>通过请求头(request header)携带Authorization添加认证方式和加密值构成base64的结果,如果首次访问而且没有Authorization字段时，会返回401，浏览器接手后一般会弹出一个帐号密码输入弹出框。输入提交完成认证以后浏览器会保存用户名和密码，从而让进入页面直接携带密码。<br>缺点时传输过程base64几乎是明文存储，大部分情况是在https下使用。<br>put上传内容获取，通过data事件监听传输即可。<br>http接收数据上传</p>
+</li>
+<li><p>通过request的data事件接收内容，保存在数组，在close事件时通过Buffer.toString()保存在起来，之后通过Content-Type判断类型(form、json、xml)等判断解析出需要的字段数据。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mime = <span class="function"><span class="keyword">function</span><span class="params">(req)</span></span>{</div><div class="line">    <span class="keyword">var</span> str = req.headers[<span class="string">'Content-Type'</span>] || <span class="string">''</span>;    </div><div class="line">    <span class="keyword">return</span> str.split(<span class="string">';'</span>)[<span class="number">0</span>];</div><div class="line">}    </div><div class="line"><span class="comment">//json格式</span></div><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span></span>{</div><div class="line">    <span class="keyword">if</span>(mime(req) === <span class="string">'application/json'</span>) {</div><div class="line">        <span class="keyword">try</span>{</div><div class="line">            <span class="comment">//rawBody是通过req的data事件接收到的结果</span></div><div class="line">            req.body = <span class="built_in">JSON</span>.parse(req.rawBody);</div><div class="line">        }<span class="keyword">catch</span>(e){</div><div class="line">            <span class="comment">//Bad request</span></div><div class="line">            res.writeHead(<span class="number">400</span>);    </div><div class="line">            res.end(<span class="string">'Ivalid JSON'</span>);</div><div class="line">            <span class="keyword">return</span> ;</div><div class="line">        }</div><div class="line">        todo(req.body);</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在文件上传(multipart/form-data)方式数据上传时，通过data事件来接收变得不可接受了，可以使用模块formidable，将req传入进行解析后回调,它是基于流式处理解析报文（request body)</p>
+</li>
+<li><p>文件上传时要限制大小，否则将会发生内存被占光的情况。解决办法有2个，一是限制大小，通过判断request.headers[“content-length”]来限制大小；二是通过request.on(“data”,function(chunk){len+=chunk.length});事件接收文件时来判断是否超过限制长度</p>
+</li>
+<li><p>有一种攻击叫CSRF(Cross-Site Request Forgery)即为跨站请求伪造，是让用户访问其他一个网站通过’form’表单提交到需要跨站的网站，这时候用户如果登录了，则能看到用户的信息。防御是在自己网站正常的form表单里面添加一个隐藏input(hidden)值设为一个随机数，并且把随机数保存在session里面(session是把id保存在用户cookie里面而值保存在服务器)，用户提交时就能做防御。能解决的原因是cookie是浏览器根据url自动带上的，而保存在自家网站的是其他人拿不到这个数据，所以能防御。</p>
+</li>
+<li><p>一台机器可以启动多个服务器(nginx、lighttpd、apache、nodejs)监听不同端口号，经过服务器解析路由请求头等信息，分到不同的服务端语言(php等)(或者直接返回静态文件内容)，然后php解析路由分到不同的控制器（mvc）。<br>负载均衡是指多台机器分担多并发请求。有一个主服务器为了接收所有请求，进行分发分担到其他机器上面，域名直接解析到这个服务器的ip上。<br>假设b.com的主服务器IP是192.168.5.149，负载均衡到192.168.5.150和192.168.5.151机器上<br>现将域名b.com解析到192.168.5.149IP上。<br>在主服务器(192.168.5.149)的nginx.conf加入以下代码：</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">upstream b.com { </div><div class="line">        server  <span class="number">192.168</span>.<span class="number">5.150</span>:<span class="number">80</span>; </div><div class="line">        server  <span class="number">192.168</span>.<span class="number">5.151</span>:<span class="number">80</span>; </div><div class="line">  } </div><div class="line"></div><div class="line">  server{ </div><div class="line">      listen <span class="number">80</span>; </div><div class="line">      server_name b.com; </div><div class="line">      location / { </div><div class="line">          proxy_pass         http://b.com; </div><div class="line">          proxy_<span class="keyword">set</span>_header   Host             <span class="variable">$host</span>; </div><div class="line">          proxy_<span class="keyword">set</span>_header   X-Real-IP        <span class="variable">$remote_addr</span>; </div><div class="line">              proxy_<span class="keyword">set</span>_header   X-Forwarded-For  <span class="variable">$proxy_add_x_forwarded_for</span>; </div><div class="line">      } </div><div class="line">  }</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>保存重启nginx</p>
+</li>
+<li><p>在192.168.5.150与192.168.5.151机器上设置nginx，打开nginx.conf在末尾添加以下代码：</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">server</span>{ </div><div class="line">  listen <span class="number">80</span>; </div><div class="line">  server_name b.com; </div><div class="line">  <span class="keyword">index</span> <span class="keyword">index</span>.html; </div><div class="line">  root /data0/htdocs/www; </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>服务端分为静态文件系统和页面（一般是mvc）系统</p>
+</li>
+<li><p>静态文件服务器一般用来放置前端文件css、image、tpl、html等，通过路径解析到对应的系统文件夹。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//常见静态服务器</span></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">    <span class="keyword">var</span> fs = requrie(<span class="string">'fs'</span>);</div><div class="line">    <span class="keyword">var</span> pathname = <span class="built_in">require</span>(<span class="string">'url'</span>).parse(req.url).pathname    </div><div class="line">    fs.readFile(path.join(__dirname, pathname), <span class="function"><span class="keyword">function</span><span class="params">(err, file)</span></span>{</div><div class="line">        <span class="keyword">if</span>(err){</div><div class="line">            res.writeHead(<span class="number">404</span>);</div><div class="line">            res.end(<span class="string">'找不到相关文件。- -'</span>);</div><div class="line">        } <span class="keyword">else</span> {</div><div class="line">            res.writeHead(<span class="number">200</span>);</div><div class="line">            res.end(file);</div><div class="line">        }   </div><div class="line">    });  </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>mvc系统一般基于某个框架来接收所有所有来源，然后分流到各个controller里去数据库获取数据，展示数据，使用use方法来绑定一个路由到一个控制器。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取query</span></div><div class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"><span class="keyword">var</span> querystring = requrie(<span class="string">'querystring'</span>);</div><div class="line"><span class="keyword">var</span> query = url.parse(res.url,<span class="literal">true</span>).query <span class="comment">//{name: 'bar'}</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>分流方式分为手工映射、自然映射。前者是通过手工添加路由匹配到对应的controller来处理，后者是约定一个路径自动去到对应的controller。<br>以前是一个操作，主要体现在行为上，比如增、删、改、查都直接对应一个url地址</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">POST /user/add?username=conan</div><div class="line">GET /user/<span class="operator"><span class="keyword">delete</span>?username=conan</span></div><div class="line">POST /<span class="keyword">user</span>/<span class="keyword">set</span>?username=conan</div><div class="line"><span class="keyword">GET</span> /<span class="keyword">user</span>/<span class="keyword">get</span>?username=conan</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>而RESTful则把一个用户看成一个资源（类似面向对象），在请求头里面（request header）的method里面加入操作属性（增删改查）。</p>
+</li>
+<li><p>RESTful是将请求头(request header)里面的method引入到设计中，参与资源的操作和更改资源的状态。然后根据请求头中的accept在返回头(response header)返回正确的Content-Type，以前是通过后缀来决定Content-Type来决定的。也就是把一些原本在url里面存储的信息搬到请求头(request header)里面来。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = {};</div><div class="line"></div><div class="line"><span class="keyword">var</span> router = {all: []};</div><div class="line"></div><div class="line">app.<span class="keyword">use</span> = <span class="function"><span class="keyword">function</span><span class="params">(pathReg, action)</span></span>{</div><div class="line"></div><div class="line"></div><div class="line">  router.all.push([pathReg, action]);    </div><div class="line"></div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">var</span> methods = [<span class="string">'get'</span>, <span class="string">'post'</span>, <span class="string">'delete'</span>, <span class="string">'put'</span>];</div><div class="line"></div><div class="line">methods.<span class="keyword">forEach</span>(<span class="function"><span class="keyword">function</span><span class="params">(val, key)</span></span>{</div><div class="line"></div><div class="line"></div><div class="line">  router[val] = [];</div><div class="line">  app[val] = <span class="function"><span class="keyword">function</span><span class="params">(pathReg, action)</span></span>{</div><div class="line">      router[val].push([apthReg, action]);    </div><div class="line">  }    </div><div class="line"></div><div class="line">});</div><div class="line"></div><div class="line">app.get(/action/, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line"></div><div class="line">})</div></pre></td></tr></table></figure>
+
+<ul>
+<li>例如express就有这4个方法，当然还有更多</li>
+</ul>
+<h4 id="模板">模板</h4>
+<ul>
+<li>模板技术是为了把业务逻辑和视图部分分离开来，但是还是很多工程师逻辑写进模板</li>
+<li>为了达到重用和分离的目的，需要引入子模板和父模板的概念，子模板是重用一块块颗粒模板，父模板则是结构(layout)的中嵌套其他模板，所以前者是替换标记位<code>&lt;div&gt;&lt;%=name%&gt;&lt;/div&gt;</code>，而后者是替换里面的内容<code>&lt;div &gt;&lt;%-body%&gt;&lt;/div&gt;</code>。</li>
+</ul>
+<h4 id="玩转进程">玩转进程</h4>
+<ul>
+<li><p>require(“child_process”)模块提供了4个方法，后面3种方法是前面方法的延升。<br>spawn(‘node’, [‘worker.js’]) 启动一个子进程来执行命令(执行任意命令行)。<br>exec(“node worker.js”, function(err, stdout, stderr){})启动一个子进程来执行命令(任意命令行命令)，与spawn不同的是接口不同，它有一个回调函数来获知子进程的状况。<br>execFile(‘worker.js’, function(err,stdout, stderr){})启动一个子进程来执行文件(任意可执行文件)<br>fork(‘./worker.js’)与spawn类似，他的不同点在于它创建的node的子进程只需要执行<br>子进程启动是需要一定时间（T）的。<br>在子进程之间的事件绑定，程序会解决上面说的时间T，所以用户不用考虑绑定(on)和触发(send)延迟问题，当成正常的即可。<br>多线程的思路Master-worker</p>
+</li>
+<li><p>创建一个入口masterjs负责创建多个child_process的worker，并且监听一个端口(port)，在listen之后，将句柄通过进程之间的通信方式send过去，关闭（close）掉当前master的server，因为server被“克隆”到子进程了，所以关闭的仅仅是master`的连接</p>
+</li>
+<li>在worker里面创建一个http server去监听message等待父进程master发送句柄过来，然后用这个句柄去监听connection事件，等待客户端(client)用户来连接。然后把把事件emit到自己创建的server里面去。</li>
+<li>在父进程里面使用send发送只能发送字符串，发过去的句柄仅仅句柄描述符（实际上是个整数），在发送和接收之间会有一个转成字符串然后转成对象的过程。<br>这时候用户访问时某worker就能幸运的抢到“宠幸”，这些进程服务是抢占式的。<br>一定程度上可以做适当的负载均衡。<br>客户端js和服务端js的区别，服务端分为2个阶段，一个是开启nodejs服务阶段，一个是客户端访问服务端时的执行阶段，而客户端则是用户打开页面执行js操作DOM节点</li>
+<li>子进程除了send和message以外还有</li>
+<li>error: 当子进程无法被复制创建、无法被杀死、无法发送消息时触发该事件。</li>
+<li>exit：子进程退出时触发该事件，子进程如果是正常退出，事件的第一个参数为退出码，否则为null。如果进程通过kill杀死的，会得到第二个参数，他表示杀死进程时的信号。</li>
+<li>close；在子进程的标准输入输出（standard input、standard output）中指触发该事件，参数与exit相同。</li>
+<li>disconnect：在父进程或者子进程中调用disconnect()方法时触发该事件，在调<br>该方法时将会关闭IPC通道（进程通信通道）</li>
+<li>kill(kill -l),可以发送一个系统信号，并不会真正杀死进程，只是在子进程中监听系统信号之心约定的操作。</li>
+<li><p>为了让集群稳定，通过父进程监听子进程的’exit’ 事件，在发生eixt之后创建一个子进程来接替退出的子进程的服务任务。</p>
+</li>
+<li><p>子进程监听uncaughtException，在发生未捕获的意外时，执行server.close()停止接受新的连接。但是close是需要时间的，极端情况下所有的进程都进入close，那所有的服务都不能够使用了。这时候就可以在uncaughtException发生时立刻发送给父进程一个自杀信号’process.send({act: ‘suicide’})’，父进程就可以马上创建子进程来接收服务了<br>有错误时使用logger.error(err)把错误信息传入日志。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> info = fs.createWriteStream(<span class="string">'info.log'</span>,{flag: <span class="string">'a'</span>, mode: <span class="string">'0666'</span>});</div><div class="line"><span class="keyword">var</span> error = fs.createWriteStream(<span class="string">'error.log'</span>,{flag: <span class="string">'a'</span>, mode: <span class="string">'0666'</span>});</div><div class="line"><span class="keyword">var</span> loger = <span class="keyword">new</span> <span class="built_in">console</span>.Console(info, error);</div><div class="line">logger.log(<span class="string">'hello world'</span>);    <span class="comment">//write to info.log file;</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>服务端用户太多，需要把用户错误的信息记录下来方便解决问题，日志的必要性非常高。</li>
+<li>因为子进程是抢占式的，影响抢占的是CPU的繁忙度，而对不同业务，可能存在I/O繁忙，而CPU较为空闲的情况，这可能造成某个进程能够抢到较多请求，而I/O很忙的情况，造成负载不均衡。<br>promise的特点是直接返回结果给你，无需等待。用这个结果可以获得数据。</li>
+</ul>
+<h4 id="node代码">node代码</h4>
+<ul>
+<li>可以使用process.env查看所有environment所有相关变量</li>
+<li>可以用process.env.PWD来获取网站根目录(入口js文件位置)入口。<br>2下划线开头的是代表当前文件的的文件夹路径</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//./app.js</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'./public/other.js'</span>);<span class="comment">//</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//./public/other.js</span></div><div class="line"><span class="built_in">console</span>.log(process.env.PWD, __dirname); <span class="comment">// ./ ./public</span></div></pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/nodejs-basic/">nodejs basic</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://js250.com/2015/02/01/nodejs-basic/" data-title="node.js学习笔记 | microConan" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/02/01/express-framework-source-explain/"  title="express源码浅析">
+ <strong>NEXT:</strong><br/> 
+ <span>express源码浅析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#异步"><span class="toc-number">2.</span> <span class="toc-text">异步</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stream流"><span class="toc-number">3.</span> <span class="toc-text">stream流</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic认证"><span class="toc-number"></span> <span class="toc-text">basic认证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#模板"><span class="toc-number">1.</span> <span class="toc-text">模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#玩转进程"><span class="toc-number">2.</span> <span class="toc-text">玩转进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#node代码"><span class="toc-number">3.</span> <span class="toc-text">node代码</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/express-framework-source-explain/" title="express framework source explain">express framework source explain<sup>1</sup></a></li>
+		
+			<li><a href="/tags/express-source/" title="express source">express source<sup>0</sup></a></li>
+		
+			<li><a href="/tags/nodejs-basic/" title="nodejs basic">nodejs basic<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/express-framework-source-explain/" style="font-size: 20.00px;">express framework source explain</a><a href="/tags/express-source/" style="font-size: 10.00px;">express source</a><a href="/tags/nodejs-basic/" style="font-size: 20.00px;">nodejs basic</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">Archives</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">16</span></li></ul>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"microsoft"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
