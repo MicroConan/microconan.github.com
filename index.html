@@ -104,7 +104,9 @@ web sql、indexedDB</p>
     <h1 itemprop="name">vce-note</h1>
     
      
-           <p itemprop="description" ></p>
+           <p itemprop="description" >不能直接修改value值，因为使用逻辑符判断时受影响
+不能保存在一个在另外一个名字里面（如下），因为模板里面遍历时会被读取到，而将其设置为enumerable:false，则在部分地方拷贝时(merge、extend)时拷贝不到。。
+添加一个影子对象_vceshadow_，而这个</p>
         
     
     <time datetime="2015-02-15T02:32:39.000Z" itemprop="datePublished">2月 15 2015</time>

@@ -9,6 +9,10 @@
     
     <meta name="author" content="conan">
     
+    <meta name="description" content="不能直接修改value值，因为使用逻辑符判断时受影响
+不能保存在一个在另外一个名字里面（如下），因为模板里面遍历时会被读取到，而将其设置为enumerable:false，则在部分地方拷贝时(merge、extend)时拷贝不到。。
+添加一个影子对象_vceshadow_，而这个数据不一定被使用到，">
+    
     
     
     
@@ -72,7 +76,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-02-15T02:32:39.000Z" itemprop="datePublished">2月 15 2015</time>
-    Updated:<time datetime="2015-02-15T02:33:33.000Z" itemprop="dateModified">2月 15 2015</time>
+    Updated:<time datetime="2015-02-15T02:34:03.000Z" itemprop="dateModified">2月 15 2015</time>
     
   </p>
 </header>
@@ -84,7 +88,13 @@
 		
 		</div>
 		
-		  
+		<ul>
+<li>不能直接修改value值，因为使用逻辑符判断时受影响</li>
+<li>不能保存在一个在另外一个名字里面（如下），因为模板里面遍历时会被读取到，而将其设置为<code>enumerable:false</code>，则在部分地方拷贝时(merge、extend)时拷贝不到。。</li>
+<li>添加一个影子对象<code>_vceshadow_</code>，而这个数据不一定被使用到，所以也被否决</li>
+<li>通过<code>Object.define</code>方法或者<code>__defineGetter__</code>方法设置读取方法，模板使用时才转化成修改的值，而在逻辑符判断时，修改<code>\{%if \%\}</code>这类tag，还原成原来的值，使逻辑判断不出错。        </li>
+</ul>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
