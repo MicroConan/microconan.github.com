@@ -99,7 +99,7 @@ web sql、indexedDB
     </p>
   <p class="article-time">
     <time datetime="2015-02-15T02:32:39.000Z" itemprop="datePublished">2月 15 2015</time>
-    Updated:<time datetime="2015-02-15T02:33:06.000Z" itemprop="dateModified">2月 15 2015</time>
+    Updated:<time datetime="2015-02-15T02:39:10.000Z" itemprop="dateModified">2月 15 2015</time>
     
   </p>
 </header>
@@ -236,7 +236,7 @@ web sql、indexedDB
 <li>4、服务端对客户端做应答 HTTP/1.1 200 OK(如果状态码是300系列,则直接进入第七步；如果200系列则返回数据)</li>
 <li>5、服务端返回应答头(response header)</li>
 <li>6、服务器返回数据（response body）.</li>
-<li>7、如果返回头(response header)没有设置Connection:keep-alive(HTTP持久连接)则关闭socket<br><img src="./1413562114362.png" alt="Alt text"></li>
+<li>7、如果返回头(response header)没有设置Connection:keep-alive(HTTP持久连接)则关闭socket<br><img src="/img/1413562114362.png" alt="Alt text"></li>
 </ul>
 </li>
 </ul>
@@ -254,7 +254,7 @@ web sql、indexedDB
 <li>如何清理缓存呢？<br>  因为浏览器根据url来判断进行缓存，1、修改文件名称。2、加时间戳。</li>
 </ul>
 <h2 id="存储">存储</h2>
-<p><img src="./1414041670137.png" alt="Alt text"></p>
+<p><img src="/img/1414041670137.png" alt="Alt text"></p>
 <ul>
 <li>cookie <ul>
 <li>Cookie 用于弥补 HTTP 协议的无状态性，服务器可以使用 Cookie 中包含的信息来判断 HTTP 传输中的状态。</li>
@@ -276,7 +276,7 @@ web sql、indexedDB
 
 <pre><code><span class="pp">- userData的时候其实是利用某个拥有特地属性的标签去写`XML`文件，然后你可以新建<span class="params">(load)</span>一个XML文件，去写属性，然后保存<span class="params">(save)</span>起来。
 - 当然有限制:单个文件的大小限制是128KB<span class="params">(<span class="number">64</span>)</span>，一个域名下总共可以保存1024KB<span class="params">(<span class="number">640</span>)</span>的文件</span>
-</code></pre><p><img src="./1414313413340.png" alt="Alt text"></p>
+</code></pre><p><img src="/img/1414313413340.png" alt="Alt text"></p>
 <ul>
 <li><p>webSql</p>
 <ul>
@@ -298,7 +298,7 @@ web sql、indexedDB
 </li>
 </ul>
 <h2 id="basic_认证">basic 认证</h2>
-<p><img src="./1413527226420.png" alt="Alt text"></p>
+<p><img src="/img/1413527226420.png" alt="Alt text"></p>
 <ul>
 <li>通过请求头(request header)携带Authorization添加认证方式和加密值构成base64的结果,如果首次访问而且没有Authorization字段时，会返回401，浏览器接手后一般会弹出一个帐号密码输入弹出框。输入提交完成认证以后浏览器会保存用户名和密码，从而让进入页面直接携带密码。</li>
 <li>缺点时传输过程base64几乎是明文存储(base64)，大部分情况是在https下使用。待会详细讲解https。</li>
@@ -340,10 +340,10 @@ web sql、indexedDB
 <li>Bigpipe：先发送架构DOM结构（layout）(可能还会带有读取更快的数据块)。1、为了给其他数据块加载的时候有自己的『位置』。2、给用户更快的、更平滑的效果。<br>然后其他较慢数据块，通过把数据(大部分情况是通过模板已经拼接好的DOM结构)放到script标签里面执行js插入(innerHTML、appendChild)到对应的位置。</li>
 </ul>
 <ul>
-<li>左侧导航都是静态数据<br><img src="./1414035202724.png" alt="Alt text"></li>
-<li>[推荐模块]被展示出来<br><img src="./1414035255568.png" alt="Alt text"></li>
-<li>[第一条状态]被展示<br><img src="./1414035345425.png" alt="Alt text"></li>
-<li>展示完毕<br><img src="./1414035384261.png" alt="Alt text"></li>
+<li>左侧导航都是静态数据<br><img src="/img/1414035202724.png" alt="Alt text"></li>
+<li>[推荐模块]被展示出来<br><img src="/img/1414035255568.png" alt="Alt text"></li>
+<li>[第一条状态]被展示<br><img src="/img/1414035345425.png" alt="Alt text"></li>
+<li>展示完毕<br><img src="/img/1414035384261.png" alt="Alt text"></li>
 </ul>
 </li>
 </ul>
@@ -481,7 +481,7 @@ web sql、indexedDB
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta <span class="variable">name=</span><span class="string">"apple-itunes-app"</span> <span class="variable">content=</span><span class="string">"app-id=425692044, app-argument=appdp:275"</span>/&gt;</div></pre></td></tr></table></figure>
 
-<p>app-id是你的app唯一id，可以在<a href="https://linkmaker.itunes.apple.com/us/?urlDesc=" target="_blank" rel="external">https://linkmaker.itunes.apple.com/us/?urlDesc=</a> 找到。<br>app-arguments是传给app的参数，app里面可以根据参数进入不同的页面。<br><img src="./1413879944317.png" alt="Alt text"></p>
+<p>app-id是你的app唯一id，可以在<a href="https://linkmaker.itunes.apple.com/us/?urlDesc=" target="_blank" rel="external">https://linkmaker.itunes.apple.com/us/?urlDesc=</a> 找到。<br>app-arguments是传给app的参数，app里面可以根据参数进入不同的页面。<br><img src="/img/1413879944317.png" alt="Alt text"></p>
 <ul>
 <li>android 后台 service</li>
 <li>在android系统中你的app开启一个service来监听一个端口（如6249），然后通过jsonp思路和app进行信息交互</li>
