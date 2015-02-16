@@ -4,14 +4,17 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>swig-source | microConan</title>
+    <title>swig 源码解析 | microConan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="conan">
     
     <meta name="description" content="swig 源码解析
 
-通过splitter正则将所有模板字符以(\{\{ anyChar \}\} 和 \{\% anyChar \%\} 还有 \{# anyChar #\})为分隔符，分离(split)成一个数组，然后循环处理这些变量(var)或者标签(tag)或者字符串(string)或者注释">
+自己看的，写得比较乱。。。。
+
+
+通过splitter正则将所有模板字符以(\{\{ anyChar \}\} 和 \{\% anyChar \%\} 还有 \{# anyChar #\})为分隔符，分离(split)成一个数组，然后循环处理这些变量(var)或者标签(tag)">
     
     
     
@@ -68,7 +71,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/16/swig-source/" title="swig-source" itemprop="url">swig-source</a>
+      <a href="/2015/02/16/swig-source/" title="swig 源码解析" itemprop="url">swig 源码解析</a>
   </h1>
   <p class="article-author">By
     
@@ -76,7 +79,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-02-16T07:12:44.000Z" itemprop="datePublished">2月 16 2015</time>
-    Updated:<time datetime="2015-02-16T07:15:03.000Z" itemprop="dateModified">2月 16 2015</time>
+    Updated:<time datetime="2015-02-16T07:16:07.000Z" itemprop="dateModified">2月 16 2015</time>
     
   </p>
 </header>
@@ -89,6 +92,9 @@
 		</div>
 		
 		<h1 id="swig_源码解析">swig 源码解析</h1>
+<blockquote>
+<p>自己看的，写得比较乱。。。。</p>
+</blockquote>
 <ul>
 <li>通过<a href="https://github.com/paularmstrong/swig/blob/master/lib/parser.js#L459" target="_blank" rel="external">splitter</a>正则将所有模板字符以(<code>\{\{ anyChar \}\}</code> 和 <code>\{\% anyChar \%\}</code> 还有 <code>\{# anyChar #\}</code>)为分隔符，分离(split)成一个数组，然后循环处理这些变量(var)或者标签(tag)或者字符串(string)或者注释（comment），</li>
 <li>如果是<code>tag</code>(如{\%if a == 1 \%})，会调用<a href="https://github.com/paularmstrong/swig/blob/master/lib/parser.js#L513" target="_blank" rel="external">parseTag</a>方法，这个方法将<code>tagName</code>(if)之后的字符，进行词法分析，通过<code>lexer.read</code>(lexer.js)方法将字符通过<code>rules</code><a href="https://github.com/paularmstrong/swig/blob/master/lib/lexer.js#L76" target="_blank" rel="external">数组</a>里面提供的各种正则匹配规则，一一匹配，直到找到合适的<a href="https://github.com/paularmstrong/swig/blob/master/lib/lexer.js#L16" target="_blank" rel="external">类型</a>（如变量、字符串、逻辑符、函数、操作符、布尔型等），放在一个数组里面([变量,比较符号,数字])，最后返回一个<a href="https://github.com/paularmstrong/swig/blob/master/lib/parser.js#L547" target="_blank" rel="external">每组字符解析成tokens </a>。<br>然后会使用<a href="https://github.com/paularmstrong/swig/blob/master/lib/parser.js#L486" target="_blank" rel="external">TokenParser</a>解析它,将tokens等参数传入。 得到参数，会调用对应的<code>注册的tag</code>的<a href="https://github.com/paularmstrong/swig/blob/master/lib/parser.js#L547" target="_blank" rel="external">parse</a>方法，会将<code>TokenParser</code>的实例<code>parse</code>传入，在tag的parse方法里面可以注册一些方法，在不同时机调用，例如<code>start</code>、<code>end</code>、<code>*</code>等， 在<code>TokenParser</code>实例被调用<code>parse</code>方法时，会循环调用<code>parseToken</code>解析一个个的token，这个<code>parseToken</code>会根据token的类型，进行不同处理。。。。注册好了之后再调用将TokenParser的实例<code>parse</code>的<a href="https://github.com/paularmstrong/swig/blob/master/lib/parser.js#L577" target="_blank" rel="external">parse</a>方法，得到tag的参数，最后返回一个object对象，称之为一个<code>token</code></li>
@@ -116,7 +122,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://js250.com/2015/02/16/swig-source/" data-title="swig-source | microConan" data-tsina="null" class="share clearfix">
+  <div data-url="http://js250.com/2015/02/16/swig-source/" data-title="swig 源码解析 | microConan" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
