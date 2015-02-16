@@ -76,7 +76,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-02-15T02:32:39.000Z" itemprop="datePublished">2月 15 2015</time>
-    Updated:<time datetime="2015-02-15T02:38:15.000Z" itemprop="dateModified">2月 15 2015</time>
+    Updated:<time datetime="2015-02-15T16:58:24.000Z" itemprop="dateModified">2月 16 2015</time>
     
   </p>
 </header>
@@ -92,7 +92,7 @@
 <li>不能直接修改value值，因为使用逻辑符判断时受影响</li>
 <li>不能保存在一个在另外一个名字里面（如下），因为模板里面遍历时会被读取到，而将其设置为<code>enumerable:false</code>，则在部分地方拷贝时(merge、extend)时拷贝不到。。</li>
 <li>添加一个影子对象<code>_vceshadow_</code>，而这个数据不一定被使用到，所以也被否决</li>
-<li>通过<code>Object.define</code>方法或者<code>__defineGetter__</code>方法设置读取方法，模板使用时才转化成修改的值，而在逻辑符判断时，修改<code>\{%if \%\}</code>这类tag，还原成原来的值，使逻辑判断不出错。        </li>
+<li>通过<code>Object.define</code>方法或者<code>__defineGetter__</code>方法设置读取方法，模板使用时才转化成修改的值，而在逻辑符判断时，修改<code>\{%if \%\}</code>这类tag，还原成原来的值，使逻辑判断不出错。但是可能会做merge操作也拷贝不到…</li>
 </ul>
   
 	</div>
@@ -177,7 +177,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">Archives</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">16</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">16</span></li></ul>
   </div>
 
 
