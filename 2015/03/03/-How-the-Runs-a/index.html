@@ -79,7 +79,7 @@ Angular使用者想知">
     </p>
   <p class="article-time">
     <time datetime="2015-03-03T03:19:47.000Z" itemprop="datePublished">3月 3 2015</time>
-    Updated:<time datetime="2015-03-03T03:23:43.000Z" itemprop="dateModified">3月 3 2015</time>
+    Updated:<time datetime="2015-03-03T03:24:44.000Z" itemprop="dateModified">3月 3 2015</time>
     
   </p>
 </header>
@@ -126,14 +126,12 @@ Angular使用者想知">
 <p>还记得我说过关于<code>event-lopp</code>，当浏览器接收到事件时，就会设法完成<code>angular context</code>的<code>$digest</code>循环将会被触发，这个循环将会做较小的2种循环，一个是<code>$evalAsync</code>队列，另外一个就是我们这篇文章的主题<code>$watch</code>列表。</p>
 <p>这个过程是怎么样的？ <code>$digest</code>通过循环<code>$watch</code>列表，像下面一样询问:</p>
 <p>你好<code>$watch</code>，你的值是什么？</p>
-<pre><code><span class="bullet">- </span>是<span class="code">`9`</span>
-</code></pre><p>好吧，有没有发生改变？</p>
-<pre><code><span class="deletion">- 没有呀,先生。</span>
-</code></pre><p>（这一个没有发生改变，所以就移动到下一个）<br>你，值是多少？</p>
-<pre><code><span class="bullet">- </span>是<span class="code">`Foo`</span>。
-</code></pre><p>值有没有变化？</p>
-<pre><code><span class="bullet">- </span>是的，变成了<span class="code">`Bar`</span>。
-</code></pre><p>(好的，我们将DOM进行更新)<br>这里会一直循环直到所有的<code>$watch</code>都被检查。</p>
+<ul>
+<li>是<code>9</code><br>好吧，有没有发生改变？</li>
+<li>没有呀,先生。<br>（这一个没有发生改变，所以就移动到下一个）<br>你，值是多少？</li>
+<li>是<code>Foo</code>。<br>值有没有变化？</li>
+<li>是的，变成了<code>Bar</code>。<br>(好的，我们将DOM进行更新)<br>这里会一直循环直到所有的<code>$watch</code>都被检查。</li>
+</ul>
 <p>这是<code>dirty-checking脏检查</code>，现在这里所有的<code>$watch</code>都被检查完毕了，还有有一个其他的任务要做：这里的所有<code>$watch</code>都发生了更新？如果他们中最新的一个发生了改变，这个循环将重头开始，直到确定所有<code>$watch</code>的会没有改变。这个循环保证了所有的模型都是干净(clean)的。想象一下如果这个循环执行超过10次以上，这里将会抛出一个意外，阻止无限循环。</p>
 <p>当摘要循环($digest loop)结束以后，DOM将会改变。</p>
 <p>例子：</p>
@@ -183,7 +181,7 @@ Angular使用者想知">
 
 
 
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:23:43 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:24:44 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
 
 <p>在这里我们自己创建了一个新的<code>$watch</code>。第一个参数可以是字符串或者是函数，在这个例子里面是这需要监听的属性的名称，在这里，<code>$scope.name</code>(主意我们只需要使用<code>name</code>)。第二个参数是当这个<code>$watch</code>发生改变时需要回调的函数。我们直到在这个控制器被执行时发现了这个<code>$watch</code>，将会立即执行一次。</p>
 <h2 id="试一试">试一试</h2>
@@ -195,7 +193,7 @@ Angular使用者想知">
 
 
 
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:23:43 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:24:44 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
 
 <p>在这个<code>$watch</code>（函数）里面接受了2个参数，分别是new和old，我们可以通过判断他们来跳过第一次执行。一般情况下我们不需要跳过第一次，但是我们这个特殊的例子需要，这个技巧很方便。</p>
 <p>例子三</p>
@@ -203,7 +201,7 @@ Angular使用者想知">
 
 
 
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"user.name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:23:43 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"user.name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:24:44 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
 
 <p>我们想监听<code>$scope.user</code>对象上面的所有修改，和之前的例子一样唯一的区别是(user)用了一个对象来代替之前的字符串。</p>
 <h2 id="试一下-1">试一下</h2>
@@ -217,7 +215,7 @@ Angular使用者想知">
 
 
 
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"user.name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:23:43 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"user.name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:24:44 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
 
 <h2 id="试一试-1">试一试</h2>
 <iframe class="stretch" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts" frameborder="0" name="<proxy>" src="http://null.jsbin.com/runner"></iframe>
