@@ -1,0 +1,462 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>microConan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="conan">
+    
+    <meta name="description" content="title: “ \$watch How the \$apply Runs a \$digest “date: 2015-03-03 11:19:47
+tags:
+\$watch How the \$apply Runs a \$digest
+
+原文:\$watch How the \$apply ">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="microConan" title="microConan"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="microConan">microConan</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:js250.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/03/-How-the-Runs-a/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://js250.com" title="conan">conan</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-03T03:19:47.000Z" itemprop="datePublished">3月 3 2015</time>
+    Updated:<time datetime="2015-03-03T03:21:13.000Z" itemprop="dateModified">3月 3 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags:"><span class="toc-number">1.</span> <span class="toc-text">tags:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#\$watch_How_the_\$apply_Runs_a_\$digest"><span class="toc-number"></span> <span class="toc-text">\$watch How the \$apply Runs a \$digest</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器事件循环(events-loop)和Angular-js的扩展"><span class="toc-number">1.</span> <span class="toc-text">浏览器事件循环(events-loop)和Angular.js的扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#$watch列表"><span class="toc-number">2.</span> <span class="toc-text">$watch列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#摘要循环($digest_loop)"><span class="toc-number">3.</span> <span class="toc-text">摘要循环($digest loop)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#了解angular上下文里的$apply"><span class="toc-number">4.</span> <span class="toc-text">了解angular上下文里的$apply</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如果我们的angular不使用$apply"><span class="toc-number">5.</span> <span class="toc-text">如果我们的angular不使用$apply</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一下"><span class="toc-number">6.</span> <span class="toc-text">试一下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自己使用$watch"><span class="toc-number">7.</span> <span class="toc-text">自己使用$watch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一试"><span class="toc-number">8.</span> <span class="toc-text">试一试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一下-1"><span class="toc-number">9.</span> <span class="toc-text">试一下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一试-1"><span class="toc-number">10.</span> <span class="toc-text">试一试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结尾"><span class="toc-number">11.</span> <span class="toc-text">结尾</span></a></li></ol>
+		</div>
+		
+		<p>title: “ \$watch How the \$apply Runs a \$digest “<br>date: 2015-03-03 11:19:47</p>
+<h2 id="tags:">tags:</h2>
+<h1 id="\$watch_How_the_\$apply_Runs_a_\$digest">\$watch How the \$apply Runs a \$digest</h1>
+<blockquote>
+<p>原文:<a href="http://angular-tips.com/blog/2013/08/watch-how-the-apply-runs-a-digest/" target="_blank" rel="external">\$watch How the \$apply Runs a \$digest
+</a><br>译者：microConan<br>这里我翻译的不是逐词翻译，是根据我理解的说出来的大概意思，保证不会曲解原意，只会更好理解。</p>
+</blockquote>
+<p>Angular使用者想知道数据数据绑定(data-binding)是怎么工作，这里有一些有关的词汇：<code>$watch</code>、<code>$apply</code>，<code>$digest</code>，<code>dirty-checking</code>…这些是什么，他们是怎么工作的？<br>接下来我将解答这些问题， 当然更好的解释是在参考文档里面，我这里是想把上面的关键词结合在一起向你解释出来，我这里解释的将比较简单，更多技术问题，请看源码。</p>
+<p>我们开始吧。</p>
+<h2 id="浏览器事件循环(events-loop)和Angular-js的扩展">浏览器事件循环(events-loop)和Angular.js的扩展</h2>
+<p>我们的浏览器会等待事件，拿用户交互举例子，如果你点击了一个按钮或者在输入框里面输入文字，这些时间的回调就会执行插入到javascript，然后你可以做任何的DOM操作，所以等你的函数回调完成，浏览器将DOM做适当的修改。</p>
+<p>而Angular基于这个事件循环(events-loop)扩展来创建调用<code>Angular context</code>(记住这个，这是非常重要的一个概念)，解释这个context还有它如何工作的需要说明更多的概念。</p>
+<h2 id="$watch列表">$watch列表</h2>
+<p>在任何时候你可以绑定界面的变化插入到<code>$watch</code>里面的<code>$watch list</code>，想象一下<code>$watch</code>像一个能监听model变化的东东，设想一下如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">User: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">ng-model</span>=<span class="value">"user"</span> /&gt;</span></div><div class="line">Password: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span> <span class="attribute">ng-model</span>=<span class="value">"pass"</span> /&gt;</span></div></pre></td></tr></table></figure>
+
+<p>这里的有一个<code>$scope.user</code>，它绑定到第一个input输入框，我们还有一个<code>$scope.pass</code>， 她绑定到第二个input输入框，这2个<code>$watch</code>被添加到<code>$watch list</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.foo = <span class="string">"Foo"</span>;</div><div class="line">  $scope.world = <span class="string">"World"</span>;</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hello,</div></pre></td></tr></table></figure>
+
+<p>在这里，及时我们有2个属性被添加到<code>$scope</code>,但是只有一个被绑定，所以这个例子里面只创建了一个<code>$watch</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.people = [...];</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">ul</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"person in people"</span>&gt;</span></div><div class="line">       - </div><div class="line">  <span class="tag">&lt;/<span class="title">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">ul</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>这里有多少个<code>$watch</code>被创建呢？每个person有2个属性(name和age)，加上一个<code>ng-repeat</code>。如果我们这个people列表里面有10个people，那么就有<code>(2*10)+1</code>，所以是<code>21</code>个<code>$watch</code>。</p>
+<p>所以，界面上任何一个使用到($scope上)的属性就会创建一个<code>$watch</code>，没错，然后在什么时候<code>$watch</code>被创建呢？</p>
+<p>当我们的模板加载完成之后，也就是在<code>linking phase</code>编译是寻找所有的指令然后给需要的创建<code>$watch</code>，这个听起来很好，但是…现在是什么？</p>
+<h2 id="摘要循环($digest_loop)">摘要循环($digest loop)</h2>
+<p>还记得我说过关于<code>event-lopp</code>，当浏览器接收到事件时，就会设法完成<code>angular context</code>的<code>$digest</code>循环将会被触发，这个循环将会做较小的2种循环，一个是<code>$evalAsync</code>队列，另外一个就是我们这篇文章的主题<code>$watch</code>列表。</p>
+<p>这个过程是怎么样的？ <code>$digest</code>通过循环<code>$watch</code>列表，像下面一样询问:</p>
+<p>你好<code>$watch</code>，你的值是什么？</p>
+<pre><code><span class="bullet">- </span>是<span class="code">`9`</span>
+</code></pre><p>好吧，有没有发生改变？</p>
+<pre><code><span class="deletion">- 没有呀,先生。</span>
+</code></pre><p>（这一个没有发生改变，所以就移动到下一个）<br>你，值是多少？</p>
+<pre><code><span class="bullet">- </span>是<span class="code">`Foo`</span>。
+</code></pre><p>值有没有变化？</p>
+<pre><code><span class="bullet">- </span>是的，变成了<span class="code">`Bar`</span>。
+</code></pre><p>(好的，我们将DOM进行更新)<br>这里会一直循环直到所有的<code>$watch</code>都被检查。</p>
+<p>这是<code>dirty-checking脏检查</code>，现在这里所有的<code>$watch</code>都被检查完毕了，还有有一个其他的任务要做：这里的所有<code>$watch</code>都发生了更新？如果他们中最新的一个发生了改变，这个循环将重头开始，直到确定所有<code>$watch</code>的会没有改变。这个循环保证了所有的模型都是干净(clean)的。想象一下如果这个循环执行超过10次以上，这里将会抛出一个意外，阻止无限循环。</p>
+<p>当摘要循环($digest loop)结束以后，DOM将会改变。</p>
+<p>例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">  $scope.name = <span class="string">"Foo"</span>;</div><div class="line"></div><div class="line">  $scope.changeFoo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">      $scope.name = <span class="string">"Bar"</span>;</div><div class="line">  }</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="tag">&lt;<span class="title">button</span> <span class="attribute">ng-click</span>=<span class="value">"changeFoo()"</span>&gt;</span>Change the name<span class="tag">&lt;/<span class="title">button</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>这里只有一个<code>$watch</code>($scope.name)因为没有为<code>ng-click</code>创建任何watchs(这个函数不会改变:p)</p>
+<p>我们按下这个按钮</p>
+<p>浏览器接收到事件之后进入<code>angular context</code>(我将在下一篇文章中解释原因)<br><code>$digest loop</code>将会执行循环所有的<code>$watch</code>询问是否发生改变，因为正在被监听的<code>$scope.name</code>反馈被修改，所以将会促使另一个摘要循环(<code>$digest loop</code>)。</p>
+<p>新的摘要循环反馈没有任何修改。</p>
+<p>浏览器重新回来控制更新DOM的新的值<code>$scope.name</code>。</p>
+<p>这里有个重要的事情（这看起来是甚多人的痛点(pain-point）,就是页面里面每一个事件(冒泡到添加过指令的元素)执行时都会进入<code>angular context</code>而执行<code>$digest loop</code>，意思就是你任何时候你输入一个文字在输入框里面，就会去检查所有的<code>$watch</code>。</p>
+<h2 id="了解angular上下文里的$apply">了解angular上下文里的$apply</h2>
+<p>怎么说事件进入angular的上下文，以及什么时候不进入？<code>$apply</code></p>
+<p>当事件触发通过<code>angular-context</code>回调<code>$apply</code>，如果没有调用<code>$apply</code>那自然不会动起来（更新DOM变化），现在你可能会问..上面那个例子是能共正常运行的，而且我并没有调用<code>$apply</code>，为什么？因为Angular将会调用它，所以如果你点击了包含<code>ng-click</code>的元素，这个事件（回调函数）里面将会包裹了<code>$apply</code>的调用，如果你（的页面）里面包含了有<code>ng-click</code>的input元素，然后你(在input里面)输入<code>f</code>，这个事件（的回调函数）里面将会执行像这样的代码：<code>$apply(&quot;foo = &#39;f&#39;;&quot;)</code>，如果输入其他的单词也会一样。</p>
+<h2 id="如果我们的angular不使用$apply">如果我们的angular不使用$apply</h2>
+<p>这是刚刚使用angular的用户最常见的痛点，为什么Jquery的的处理的更新没有被绑定？因为Jquery没有回调<code>$apply</code>，所以事件永远不会进入<code>angular context</code>去<code>$digest loop</code>。</p>
+<p>让我们区看个有趣的例子</p>
+<p>思考一下线面的指令(directive)和控制器(controller)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">app.directive(<span class="string">'clickable'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line"></div><div class="line"><span class="keyword">return</span> {</div><div class="line">  restrict: <span class="string">"E"</span>,</div><div class="line">  scope: {</div><div class="line">    foo: <span class="string">'='</span>,</div><div class="line">    bar: <span class="string">'='</span></div><div class="line">  },</div><div class="line">  template: <span class="string">'&lt;ul style="background-color: lightblue"&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;'</span>,</div><div class="line">  link: <span class="function"><span class="keyword">function</span><span class="params">(scope, element, attrs)</span> </span>{</div><div class="line">    element.bind(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">      scope.foo++;</div><div class="line">      scope.bar++;</div><div class="line">    });</div><div class="line">  }</div><div class="line">}</div><div class="line"></div><div class="line">});</div><div class="line"></div><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.foo = <span class="number">0</span>;</div><div class="line">  $scope.bar = <span class="number">0</span>;</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>这里的控制器绑定了<code>foo</code>和<code>bar</code>并且在ul列表里面展示出来，在任何时候点击了这个元素都将会让<code>foo</code>和<code>bar</code>递增1.</p>
+<p>如果我们点击这个元素将会遇到什么？我们将会看到他们更新了？答案是否定的，因为这个事件回调函数是基本的回调，并没有将<code>$apply</code>回调包裹进去，所以这意味着这里并没有做数字递增？不是。</p>
+<p>为什么这里的<code>$scope</code>发生了改变而没有触发<code>$digest loop</code>呢？因为<code>foo</code>和<code>bar</code>的<code>$watch</code>并没有执行，所以它并不知道这2个属性发生的改变，同样意味着如果我们在回调里面能调用<code>$apply</code>，之后所有的<code>$watch</code>被执行我们就能看到这里面被修改的DOM的更新了。</p>
+<iframe src="http://jsbin.com/opimat/2/embed?live"></iframe>
+
+<p>如果我们点击指令元素(蓝色区域)我们看不到任何的改变，但是如果我们点击了button按钮，就能看到数字增加了，而且是增加了好几个(就是点击指令元素次数叠加)，这就是我为什么说点击z指令元素（蓝色区域）没有触发任何的<code>$digest loop</code>，但是我们点击了button元素就会执行<code>$digest looop</code>，所以所有的修改都会现实出来， 包括了<code>foo</code>和<code>bar</code>。</p>
+<p>现在你知道了为什么没有达到你想要的目的了，你想要在指令里面绑定更新，很简单，只需要调用<code>$apply</code>想下面这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">element.bind(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">  scope.foo++;</div><div class="line">  scope.bar++;</div><div class="line">  </div><div class="line">  scope.$apply();</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p><code>$apply</code>是在<code>$scope</code>(或者是通过指令里面的link函数传入的<code>scope</code>)上面的函数，然后调用会触发<code>$digest loop</code>（除了当这里处于循环(<code>$digest loop</code>)过程中，这时会抛出一个意外，因为在这时不需要调用<code>$apply</code>）</p>
+<h2 id="试一下">试一下</h2>
+<iframe class="stretch" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts" frameborder="0" name="<proxy>" src="http://null.jsbin.com/runner"></iframe>
+
+<p>可以运行了！其实这里有一种更好的调用<code>$apply</code>方式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">element.bind(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">  scope.$apply(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">      scope.foo++;</div><div class="line">      scope.bar++;</div><div class="line">  });</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<p>这里有什么区别，区别就是第一个版本，我们更新值时在<code>angular context</code>的外面，如果我们这里抛出了一个错误，angular却不知道，明显这里的小李子无法看出他们的区别，但是你可以想象一下如果需要使用第三方库通过网络请求而且失败了，然后弹出一个提示窗口告诉用户出错了,如果我们没有把这块逻辑放到<code>$apply</code>里面，那么我们永远也不知道网络出错从而不能弹出提示窗口了。。</p>
+<p>所以如果我们用Jquery plugin，想要更新你的DOM，则必须保证调用了<code>$apply</code>来执行<code>$digest loop</code>。</p>
+<h2 id="自己使用$watch">自己使用$watch</h2>
+<p>你已经制动任何一个需要更新DOM的绑定都有自己的<code>$watch</code>， 但是我们自己怎么来监听(watch)修改来做完成自己的企图呢？简单。</p>
+<p>让我们看个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.name = <span class="string">"Angular"</span>;</div><div class="line"></div><div class="line">  $scope.updated = -<span class="number">1</span>;</div><div class="line"></div><div class="line">  $scope.$watch(<span class="string">'name'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    $scope.updated++;</div><div class="line">  });</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:21:13 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>在这里我们自己创建了一个新的<code>$watch</code>。第一个参数可以是字符串或者是函数，在这个例子里面是这需要监听的属性的名称，在这里，<code>$scope.name</code>(主意我们只需要使用<code>name</code>)。第二个参数是当这个<code>$watch</code>发生改变时需要回调的函数。我们直到在这个控制器被执行时发现了这个<code>$watch</code>，将会立即执行一次。</p>
+<h2 id="试一试">试一试</h2>
+<iframe class="stretch" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts" frameborder="0" name="<proxy>" src="http://null.jsbin.com/runner"></iframe>
+
+<p>我给<code>$scoope.updated</code>的初始值位置成<code>-1</code>，因为我说过，首次执行的过程中将会执行一次将<code>$scope.updated</code>增加到<code>0</code>。</p>
+<p>例子二</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.name = <span class="string">"Angular"</span>;</div><div class="line"></div><div class="line">  $scope.updated = <span class="number">0</span>;</div><div class="line"></div><div class="line">  $scope.$watch(<span class="string">'name'</span>, <span class="function"><span class="keyword">function</span><span class="params">(newValue, oldValue)</span> </span>{</div><div class="line">    <span class="keyword">if</span> (newValue === oldValue) { <span class="keyword">return</span>; } <span class="comment">// AKA first run</span></div><div class="line">    $scope.updated++;</div><div class="line">  });</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:21:13 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>在这个<code>$watch</code>（函数）里面接受了2个参数，分别是new和old，我们可以通过判断他们来跳过第一次执行。一般情况下我们不需要跳过第一次，但是我们这个特殊的例子需要，这个技巧很方便。</p>
+<p>例子三</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.user = { name: <span class="string">"Fox"</span> };</div><div class="line"></div><div class="line">  $scope.updated = <span class="number">0</span>;</div><div class="line"></div><div class="line">  $scope.$watch(<span class="string">'user'</span>, <span class="function"><span class="keyword">function</span><span class="params">(newValue, oldValue)</span> </span>{</div><div class="line">    <span class="keyword">if</span> (newValue === oldValue) { <span class="keyword">return</span>; }</div><div class="line">    $scope.updated++;</div><div class="line">  });</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"user.name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:21:13 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>我们想监听<code>$scope.user</code>对象上面的所有修改，和之前的例子一样唯一的区别是(user)用了一个对象来代替之前的字符串。</p>
+<h2 id="试一下-1">试一下</h2>
+<iframe src="http://jsbin.com/ucaxan/3/embed?live" class="" id="" style="border: 1px solid rgb(170, 170, 170); width: 100%; min-height: 300px; height: 30px;"></iframe>
+
+
+<p>啊哈？为什么不能正常工作？因为<code>$watch</code>默认的只比较对象的引用，在第一、第二个例子中，我们修改<code>$scope.name</code>就会创建一个新的原始字符，所以就会触发修改，因为这个引用被修改了。在新的例子中，因为我们监听的是<code>$scope.user</code>而我们修改的是<code>$scope.user.name</code>,这里我们输入时，只是修改了<code>$scope.user</code>的引用<code>$scope.user.name</code>，而没有修改<code>$scope.user</code>,<code>scope.user</code>永远是那个老的对象。</p>
+<p>显然这个例子不是我们想要的结果。</p>
+<p>例子四</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">app.controller(<span class="string">'MainCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>{</div><div class="line">  $scope.user = { name: <span class="string">"Fox"</span> };</div><div class="line"></div><div class="line">  $scope.updated = <span class="number">0</span>;</div><div class="line"></div><div class="line">  $scope.$watch(<span class="string">'user'</span>, <span class="function"><span class="keyword">function</span><span class="params">(newValue, oldValue)</span> </span>{</div><div class="line">    <span class="keyword">if</span> (newValue === oldValue) { <span class="keyword">return</span>; }</div><div class="line">    $scope.updated++;</div><div class="line">  }, <span class="literal">true</span>);</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">ng-model</span>=<span class="value">"user.name"</span> /&gt;</span></div><div class="line">  Name updated: Tue Mar 03 2015 11:21:13 GMT+0800 (CST) times.</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<h2 id="试一试-1">试一试</h2>
+<iframe class="stretch" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts" frameborder="0" name="<proxy>" src="http://null.jsbin.com/runner"></iframe>
+
+<p>现在可以工作了！为什么？我们增加了第三个参数进入到<code>$watch</code>，表明我们想要把默认的比较引用改成比较对象，所以当<code>$scope.user.name</code>更新时<code>$watch</code>也会相应的触发。</p>
+<p>这是<code>$watch</code>的一个小技巧但却是很基础的。</p>
+<h2 id="结尾">结尾</h2>
+<p>好吧，我希望你能学习到在Angular里面<code>data-binding</code>是如何工作的，我猜你第一印象就是这种<code>dirty-checking</code>(脏检查)速度很慢，这是不对的，它非常快和轻，但也是正确的，如果你的模板里面有2000~3000个<code>$watch</code>，那么它将变得非常延迟，但是我觉得你的项目如果到达这么大，你应该去请教一个UX专家了。</p>
+<p>无论如何，在Angular未来的版本中，将会发布基于EcmaScript 6，我们会使用<code>Object.observe</code>来大幅度改善<code>$digest loop</code>，到时候我会重新写一下涉及相关功能的技巧的wen’z</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://js250.com/2015/03/03/-How-the-Runs-a/" data-title="microConan" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/02/16/swig-source/"  title="swig 源码解析">
+ <strong>NEXT:</strong><br/> 
+ <span>swig 源码解析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags:"><span class="toc-number">1.</span> <span class="toc-text">tags:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#\$watch_How_the_\$apply_Runs_a_\$digest"><span class="toc-number"></span> <span class="toc-text">\$watch How the \$apply Runs a \$digest</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器事件循环(events-loop)和Angular-js的扩展"><span class="toc-number">1.</span> <span class="toc-text">浏览器事件循环(events-loop)和Angular.js的扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#$watch列表"><span class="toc-number">2.</span> <span class="toc-text">$watch列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#摘要循环($digest_loop)"><span class="toc-number">3.</span> <span class="toc-text">摘要循环($digest loop)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#了解angular上下文里的$apply"><span class="toc-number">4.</span> <span class="toc-text">了解angular上下文里的$apply</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如果我们的angular不使用$apply"><span class="toc-number">5.</span> <span class="toc-text">如果我们的angular不使用$apply</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一下"><span class="toc-number">6.</span> <span class="toc-text">试一下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自己使用$watch"><span class="toc-number">7.</span> <span class="toc-text">自己使用$watch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一试"><span class="toc-number">8.</span> <span class="toc-text">试一试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一下-1"><span class="toc-number">9.</span> <span class="toc-text">试一下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试一试-1"><span class="toc-number">10.</span> <span class="toc-text">试一试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结尾"><span class="toc-number">11.</span> <span class="toc-text">结尾</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/express-framework-source-explain/" title="express framework source explain">express framework source explain<sup>1</sup></a></li>
+		
+			<li><a href="/tags/express-source/" title="express source">express source<sup>0</sup></a></li>
+		
+			<li><a href="/tags/nodejs-basic/" title="nodejs basic">nodejs basic<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">Tag Cloud</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/express-framework-source-explain/" style="font-size: 20.00px;">express framework source explain</a><a href="/tags/express-source/" style="font-size: 10.00px;">express source</a><a href="/tags/nodejs-basic/" style="font-size: 20.00px;">nodejs basic</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">Archives</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">15</span></li></ul>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://js250.com" target="_blank" title="conan">conan</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"microsoft"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
