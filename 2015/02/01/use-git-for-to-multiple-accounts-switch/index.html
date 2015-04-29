@@ -76,7 +76,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-02-01T05:04:54.000Z" itemprop="datePublished">2月 1 2015</time>
-    Updated:<time datetime="2015-02-01T05:08:27.000Z" itemprop="dateModified">2月 1 2015</time>
+    Updated:<time datetime="2015-04-29T12:49:48.000Z" itemprop="dateModified">4月 29 2015</time>
     
   </p>
 </header>
@@ -101,10 +101,10 @@
 <ol>
 <li>修改master</li>
 </ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#克隆仓库</span></div><div class="line"><span class="variable">$ </span>git clone git<span class="variable">@github</span>.<span class="symbol">com:</span>saraGuo/saraguo.github.com.git</div><div class="line"><span class="comment"># 删除原始origin</span></div><div class="line"><span class="variable">$ </span>git remote remove origin</div><div class="line"><span class="comment"># 修改origin</span></div><div class="line"><span class="variable">$ </span>git remote set origin=git<span class="variable">@saraGuo</span>。github.<span class="symbol">com:</span>saraGuo/saraguo.github.com.git</div><div class="line"><span class="comment">#</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#克隆仓库</span></div><div class="line"><span class="variable">$ </span>git clone <span class="symbol">https:</span>/<span class="regexp">/github.com/sara</span>Guo/saraGuo.github.com.git</div><div class="line"></div><div class="line"><span class="comment"># 删除原始origin</span></div><div class="line"><span class="variable">$ </span>git remote remove origin</div><div class="line"><span class="comment"># 修改origin</span></div><div class="line"><span class="variable">$ </span>git remote add origin git<span class="variable">@saraGuo</span>.github.<span class="symbol">com:</span>saraGuo/saraguo.github.com.git</div><div class="line"><span class="comment">#</span></div></pre></td></tr></table></figure>
 
 <ol>
-<li>看效果</li>
+<li>看效果<br>Follow next step before you need to copy ssh-key to github</li>
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#修改一个文件</span></div><div class="line"><span class="variable">$ </span>touch test</div><div class="line"><span class="comment"># 发布</span></div><div class="line"><span class="variable">$ </span>git add -<span class="constant">A</span> && git commit -am <span class="string">'update'</span> && git push origin master</div></pre></td></tr></table></figure>
 
